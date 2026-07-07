@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
   //apirest local
-  apiUrl: "http://localhost:3000/api",
+  // apiUrl: "http://localhost:3000/api",
   //remoto
-  // apiUrl: "https://backend-crmklyntic-mean.onrender.com/api",
+  apiUrl: "https://backend-crmklyntic-mean.onrender.com/api",
   mediaUrlRemoto: 'https://res.cloudinary.com/dmv6aukai/image/upload/v1741275492/crmklyntic/uploads',
   
   clientId: '',

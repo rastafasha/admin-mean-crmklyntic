@@ -1,11 +1,11 @@
 {
-  "name": "Zlipmenu CRM ",
-  "short_name": "Zlipmenu CRM",
+  "name": "Klyntic CRM ",
+  "short_name": "Klyntic CRM",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
   "orientation": "portrait",
-  "description": "App Web para organizar Visitas Restaurantes",
+  "description": "App Web para organizar Clientes Klyntic",
   "icons": [
     {
       "src": "/favicon.ico",
