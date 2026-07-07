@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-11 col-sm-11">
+            <!-- buscador -->
+            <!-- <app-search></app-search> -->
+            <!-- buscador -->
+        </div>
+        <div class="col-xs-1 col-sm-1">
+            <div class="text-right">
+                <button class="btn btn-primary" [routerLink]="['/dashboard/editor/create']">
+  <i class="fa fa-pencil"></i>
+  Crear
+</button>
+            </div>
+        </div>
+    </div>
+    <div class="card recent-sales overflow-auto">
+        <div class="card-body">
+            <table [ngClass]="loading? 'table table-borderless datatable':'table table-borderless'">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <!-- <th>Creado</th> -->
+                        <th class="text-nowrap">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let editor of editores |  paginate: { itemsPerPage: count, currentPage: p }">
+
+                        <td><a [routerLink]="['/dashboard/user/', editor.uid]">{{editor.username}}</a> </td>
+                        <td>{{editor.email}}</td>
+                        <td>
+                            <!-- {{user.role }}  -->
+                            <span class="badge bg-dark" *ngIf="editor.role === 'SUPERADMIN'">SuperAdmin</span>
+                            <span class="badge bg-primary" *ngIf="editor.role === 'ADMIN'">Admin</span>
+                            <span class="badge bg-success" *ngIf="editor.role === 'EDITOR'">Editor</span>
+                            <span class="badge bg-danger" *ngIf="editor.role === 'USER'">Invitado</span>
+                        </td>
+                        <!-- <td>{{editor.createdAt | date:'MMM d, y, h:mm:ss a'}} </td> -->
+                        <td class="text-nowrap text-center">
+                            <a [routerLink]="['/dashboard/editor/edit', editor.id]" class="cursor" data-toggle="tooltip" data-original-title="Edit">
+                                <!-- <i class="fa fa-edit text-success" style="font-size: 18px;"></i> -->
+                                <div class="btn btn-success"><i class="fa fa-edit"></i></div>
+                            </a>
+                            <a (click)="eliminarEditor(editor.id)" class="cursor" data-toggle="tooltip" data-original-title="Borrar">
+                                <!-- <i class="fa fa-trash text-danger" style="font-size: 18px; margin-left: 10px; margin-right: 10px;"></i> -->
+                                <div class="btn btn-danger"><i class="fa fa-trash"></i></div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+    </div>
+</div>

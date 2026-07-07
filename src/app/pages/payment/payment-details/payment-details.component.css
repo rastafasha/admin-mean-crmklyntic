@@ -1,0 +1,21 @@
+.pagodetail {
+    display: flex;
+    padding: 20px;
+    flex-flow: row;
+    font-size: 15px;
+}
+
+.pagodetail p {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 5px;
+}
+
+@media (max-width:768px) {
+    .pagodetail {
+    flex-direction: column-reverse;
+}
+    .pagodetail img{
+    margin-bottom: 20px;
+}
+}

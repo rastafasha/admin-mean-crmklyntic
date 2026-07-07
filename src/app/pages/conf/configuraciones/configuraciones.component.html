@@ -1,0 +1,78 @@
+<!-- =======| Main |======= -->
+<div class="container animated fadeInUp" id="main" class="main" role="main" name="users">
+
+    <div class="col-xs-12">
+        <div class="leftside">
+            <!-- Page Title -->
+            <div class="pagetitle">
+                <h1><i class="bx bxs-user-account"></i> {{title}}</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/"><i class="fa fa-home"></i> Inicio</a></li>
+                        <li class="breadcrumb-item active">{{title}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- End Page Title -->
+            <div class="buton">
+                <button class="btn btn-outline-danger pull-right" href="javascript:void(0)" (click)="goBack()">Volver</button>
+            </div>
+        </div>
+        
+        <div class="clear"></div>
+        <section class="section configuraciones">
+
+
+            <!-- Recent Pagos -->
+            <div class="container">
+
+                <div class="row">
+
+
+                    <!-- <div class="col-xs-12 col-sm-6  col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <i class="bi bi-file-post"></i>
+                                <h2> Planes</h2>
+                                <a routerLink="/dashboard/planes">
+                                    <button class="btn btn-outline-success btn-block">Ver todos</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="col-xs-12 col-sm-6  col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <i class="fa fa-bookmark"> </i>
+                                <h2> Categorias</h2>
+                                <a routerLink="/dashboard/categories">
+                                    <button class="btn btn-outline-success btn-block">Ver todos</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-12 col-sm-6  col-md-4">
+                        <div class="card">
+                            <div class="card-body ">
+                                <i class="fa fa-user"> </i>
+                                <h2> Roles</h2>
+                                <a routerLink="/dashboard/rolesconf">
+                                    <button class="btn btn-outline-success btn-block">Ver todos</button>
+                                </a>
+                                <!-- <ul>
+                                <li *ngFor="let rol of roles">{{rol.name}}</li>
+                            </ul> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Recent Pagos -->
+
+        </section>
+    </div>
+
+</div>
+<!--/main-->

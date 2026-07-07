@@ -1,0 +1,138 @@
+<div class="modal fade" id="editCliente" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientModalLabel">{{title}}: {{clienteSeleccionado?.name}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="onClose()"></button>
+            </div>
+            <div class="modal-body">
+                <app-loading *ngIf="isLoading"></app-loading>
+                <div class="container" *ngIf="!isLoading">
+
+                    <form *ngIf="clienteForm" class="form-horizontal form-material" (ngSubmit)="handleSubmit()"
+                        [formGroup]="clienteForm">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <label>Nombre del Cliente <span class="required">*</span></label>
+                                <input type="text" formControlName="name" class="form-control" required>
+                                <div *ngIf="clienteForm.get('name')?.touched" class="text-danger">
+                                    <div *ngIf="clienteForm.get('name')?.errors?.['required']">
+                                        Campo Requerido
+                                    </div>
+                                    <div *ngIf="clienteForm.get('name')?.errors?.['minlength']">
+                                        Mínimo 3 Caracteres
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Instagram<span class="required">*</span></label>
+                                <input type="text" formControlName="rrss" class="form-control">
+                                <div *ngIf="clienteForm.get('rrss')?.touched && clienteForm.get('rrss')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>¿Tiene sitio Web?</label>
+                                <input type="text" formControlName="url" class="form-control">
+
+                            </div>
+
+                            <div class="col-xs-12 col-md-6 ">
+                                <label>Categoría<span class="required">*</span></label>
+                                <div class="input-group">
+                                    <select class="form-control" formControlName="category">
+                                        <option value="">Seleccione</option>
+                                        <option *ngFor="let data of categorias" [value]="data._id">
+                                            {{data.nombre}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="clienteForm.get('category')?.touched && clienteForm.get('category')?.errors?.['required']"
+                                        class="text-danger">Campo Requerido</div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 ">
+                                <label>Pais<span class="required">*</span></label>
+                                <div class="input-group">
+                                    <select class="form-control" formControlName="pais">
+                                        <option value="">Seleccione</option>
+                                        <option *ngFor="let data of paises" [value]="data._id">
+                                            {{data.pais}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="clienteForm.get('pais')?.touched && clienteForm.get('pais')?.errors?.['required']"
+                                        class="text-danger">Campo Requerido</div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Ubicación <span class="required">*</span></label>
+                                <textarea type="text" formControlName="ubicacion" class="form-control"></textarea>
+                                <div *ngIf="clienteForm.get('ubicacion')?.touched && clienteForm.get('ubicacion')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+
+
+                            <div class="clear"></div>
+                            <br>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Fecha de Test<span class="required">*</span></label>
+                                <input type="date" formControlName="dateTest" class="form-control">
+                                <div *ngIf="clienteForm.get('dateTest')?.touched && clienteForm.get('dateTest')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Fecha Inicio<span class="required">*</span></label>
+                                <input type="date" formControlName="dateInicio" class="form-control">
+                                <div *ngIf="clienteForm.get('dateInicio')?.touched && clienteForm.get('dateInicio')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-md-6">
+                                <label>Asociados<span class="required">*</span></label>
+                                <div class="input-group">
+
+                                    <ng-container formArrayName="partners" *ngIf="partners && partners.length > 0">
+                                        <div *ngFor="let partnerCtrl of clienteForm.get('partners').controls; let i = index"
+                                            class="form-check">
+                                            <input class="form-check-input" type="checkbox" [formControlName]="i"
+                                                [id]="'partnerCheckbox' + i" [value]="partners[i].username" />
+                                            <label class="form-check-label" [for]="'partnerCheckbox' + i">{{
+                                                partners[i].username }}</label>
+                                        </div>
+                                    </ng-container>
+
+                                </div>
+                            </div>
+                            <!-- <div class="col-xs-12 col-md-6">
+                                <label>Subir PDF<span class="required">*</span></label>
+                                <input type="file" class="cz-file-drop-input"
+                                    (change)="cambiarImagen($event.target.files[0])">
+                                <br>
+                                <br>
+                                <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
+                                    class="btn btn-success waves-effect waves-light m-r-10 ">
+                                    <i class="fa fa-save"></i> Cambiar imagen
+                                </button>
+
+                            </div> -->
+
+                        </div>
+
+                        <button class="btn btn-outline-success waves-effect waves-light m-r-10"
+                            type="submit">Guardar</button>
+
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="onClose()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

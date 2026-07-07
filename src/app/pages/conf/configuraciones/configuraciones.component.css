@@ -1,0 +1,36 @@
+.card-body {
+    padding: 14px;
+}
+
+.configuraciones {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.configuraciones .card-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.configuraciones .card-body .bi {
+    font-size: 46px;
+    color: var(--azul);
+}
+
+@media(max-width:768px) {
+    .configuraciones .card-body {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+    .configuraciones .card-body.roles {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+    }
+}

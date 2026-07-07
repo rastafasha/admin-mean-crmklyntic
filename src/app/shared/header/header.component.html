@@ -1,0 +1,94 @@
+<!-- ============================================================== -->
+<!-- Topbar header - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+            <a class="navbar-brand " href="/dashboard">
+                <!-- Logo icon --><b>
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <img src="assets/svg/logoklintic.svg" style="height:50px" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo icon -->
+                            <img src="assets/svg/logoklintic.svg" style="height:50px" alt="homepage" class="light-logo" />
+                        </b>
+                <!--End Logo icon -->
+                <!-- Logo text --><span>
+                         <!-- dark Logo text -->
+                         <img src="assets/svg/logo_letrasAdminColor.svg" style="height:20px" alt="homepage" class="dark-logo logot-text" />
+                         <!-- Light Logo text -->
+                         <img src="assets/svg/logo_letrasAdminblanco.svg" style="height:20px" class="light-logo logot-text" alt="homepage" /></span> </a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse">
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav mr-auto">
+                <!-- This is  -->
+                <li class="nav-item"> <a class="nav-link  hidden-md-up waves-effect waves-dark nav-toggler" (click)="openMenu()"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item"> <a class="nav-link  hidden-sm-down waves-effect waves-dark sidebartoggler " (click)="openMenu()"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item hidden-sm-down"></li>
+            </ul>
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav headerright">
+                <!-- ============================================================== -->
+                <!-- Search -->
+                <!-- ============================================================== >
+                <li class="nav-item hidden-xs-down search-box"> <a class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
+                    <form class="app-search">
+                        <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                    </form>
+                </li-->
+                <!-- ============================================================== -->
+                <!-- Profile -->
+                <!-- ============================================================== -->
+                <li class="nav-item">
+                    <div class="btns dayNight">
+                        <i class="fa fa-lightbulb-o" (click)="darkmode('dark')"></i>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="javascript:void(0)" (click)="openModal()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                        <div *ngIf="!profile">
+                            <img src="./assets/images/no-image.jpg" style="width:50px; height:50px" class="rounded-circle">
+                        </div>
+                        <div *ngIf="profile">
+                            <img [src]="profile.img | imagenPipe: 'profiles'" style="width:50px; height:50px" [alt]="user.username | slice:0:10" class="rounded-circle">
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right animated fadeInDown">
+                        <ul class="dropdown-user">
+                            <li>
+                                <div class="dw-user-box">
+                                    <!-- <div class="u-img"><img src="{{user.image}}" alt="{{user.username}}"></div> -->
+                                    <div class="u-text">
+                                        <h4>{{user.username | slice:0:10}} </h4>
+                                        <span *ngIf="user.role === 'SUPERADMIN'">Super Admin</span>
+                                        <span *ngIf="user.role === 'ADMIN'">Admin</span>
+                                        <span *ngIf="user.role === 'PARTNER'">Editor</span>
+                                        <span *ngIf="user.role === 'USER'">Invitado</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="http://google.com" target="_blank"><i class="ti-world"></i> Ir al Landing </a></li>
+                            <li><a (click)="logout()" style="cursor:pointer"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<!-- ============================================================== -->
+<!-- End Topbar header -->
+<!-- ============================================================== -->

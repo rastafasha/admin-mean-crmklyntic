@@ -1,0 +1,148 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="container" *ngIf="!isLoading">
+    <form class="form-horizontal form-material formPagar" (submit)="handleSubmit()" [formGroup]="PaymentRegisterForm">
+        <!-- Tipo de Pago y Método -->
+        <div class="row">
+            <div class=" col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold">Tipo de Pago <span class="required">*</span></label>
+                    <select formControlName="tipo_pago" class="form-control form-select">
+                        <option value="">Seleccione...</option>
+                        <option value="inscripcion">Inscripción</option>
+                        <option value="suscripcion">Suscripción Mensual</option>
+                    </select>
+                    <div *ngIf="PaymentRegisterForm.get('tipo_pago')?.touched && PaymentRegisterForm.get('tipo_pago')?.errors?.['required']"
+                        class="text-danger">Campo Requerido</div>
+                </div>
+            </div>
+            <div class=" col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold">Método de Pago <span class="required">*</span></label>
+                    <input type="text" formControlName="metodo_pago" class="form-control"
+                        placeholder="Ej: Zelle, Transferencia, Efectivo">
+                    <div *ngIf="PaymentRegisterForm.get('metodo_pago')?.touched" class="text-danger">
+                        <div *ngIf="PaymentRegisterForm.get('metodo_pago')?.errors?.['required']">
+                            Campo Requerido
+                        </div>
+                        <div *ngIf="PaymentRegisterForm.get('metodo_pago')?.errors?.['minlength']">
+                            Mínimo 3 Caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banco y Referencia -->
+        <div class="row mt-3">
+            <div class=" col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold">Banco Destino <span class="required">*</span></label>
+                    <input type="text" formControlName="bank_destino" class="form-control"
+                        placeholder="Nombre del banco">
+                    <div *ngIf="PaymentRegisterForm.get('bank_destino')?.touched" class="text-danger">
+                        <div *ngIf="PaymentRegisterForm.get('bank_destino')?.errors?.['required']">
+                            Campo Requerido
+                        </div>
+                        <div *ngIf="PaymentRegisterForm.get('bank_destino')?.errors?.['minlength']">
+                            Mínimo 3 Caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold">Num. Referencia <span class="required">*</span></label>
+                    <input type="text" formControlName="referencia" class="form-control"
+                        placeholder="Código de transacción">
+
+                    <div *ngIf="PaymentRegisterForm.get('referencia')?.touched" class="text-danger">
+                        <div *ngIf="PaymentRegisterForm.get('referencia')?.errors?.['required']">
+                            Campo Requerido
+                        </div>
+                        <div *ngIf="PaymentRegisterForm.get('referencia')?.errors?.['minlength']">
+                            Mínimo 3 Caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monto y Cliente -->
+        <div class="row mt-3">
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group">
+                    <label class="fw-bold">Monto Total ($) <span class="required">*</span></label>
+                    <input type="number" formControlName="amount" class="form-control" placeholder="0.00">
+                    <!-- Nota: El 33.3% se calcula automáticamente en el servidor -->
+                    <div *ngIf="PaymentRegisterForm.get('amount')?.touched" class="text-danger">
+                        <div *ngIf="PaymentRegisterForm.get('amount')?.errors?.['required']">
+                            Campo Requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <div class="form-group">
+                    <label class="fw-bold">Cliente <span class="required">*</span></label>
+
+                    <select class="form-control" formControlName="cliente">
+                        <option value="">Seleccione</option>
+                        <option *ngFor="let data of clientes" [value]="data._id">
+                            {{data.name}}
+                        </option>
+                    </select>
+                    <div *ngIf="PaymentRegisterForm.get('cliente')?.touched && PaymentRegisterForm.get('cliente')?.errors?.['required']"
+                        class="text-danger">Campo Requerido</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fecha y Status (Opcional mostrarlo aquí) -->
+        <div class="row mt-3">
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold">Fecha de Pago <span class="required">*</span></label>
+                    <input type="date" formControlName="fecha_verificacion" class="form-control">
+                    <div *ngIf="PaymentRegisterForm.get('fecha_verificacion')?.touched && PaymentRegisterForm.get('fecha_verificacion')?.errors?.['required']"
+                        class="text-danger">Campo Requerido</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-6">
+            <label>Asociados<span class="required">*</span></label>
+            <div class="input-group">
+
+                <div formArrayName="partners" *ngIf="partners && partners.length > 0">
+                    <div *ngFor="let partnerCtrl of partners; let i = index" class="form-check">
+                        <input class="form-check-input" type="checkbox" [formControlName]="i"
+                            [id]="'partnerCheckbox' + i" />
+                        <label class="form-check-label" [for]="'partnerCheckbox' + i">
+                            {{ partners[i].username }} | ({{ partners[i].role }})</label>
+                    </div>
+                </div>
+
+                <div *ngIf="PaymentRegisterForm.get('partners')?.touched && PaymentRegisterForm.get('partners')?.invalid" class="text-danger mt-2">
+                    <div *ngIf="PaymentRegisterForm.get('partners')?.errors?.['minimumPartners']">
+                        Mínimo {{ PaymentRegisterForm.get('partners')?.errors?.['minimumPartners']?.required }} personas (SUPERADMIN, ADMIN, PARTNER). Seleccionados: {{ PaymentRegisterForm.get('partners')?.errors?.['minimumPartners']?.actual }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Campos Ocultos (Para la repartición de sueldos) -->
+        <!-- Estos IDs se pueden cargar automáticamente en el TS -->
+        <input type="hidden" formControlName="vendedorId">
+        <input type="hidden" formControlName="adminId">
+        <input type="hidden" formControlName="ceoId">
+
+        <div class="mt-4 ">
+            <button class="btn btn-outline-success waves-effect waves-light m-r-10" type="submit"
+                [disabled]="isLoading">
+                <span *ngIf="!isLoading">Registrar Pago y Generar Comisiones</span>
+                <span *ngIf="isLoading">Procesando...</span>
+            </button>
+        </div>
+    </form>
+</div>

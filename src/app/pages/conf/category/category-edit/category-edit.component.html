@@ -1,0 +1,137 @@
+<!-- =======| Main |======= -->
+<div class="container animated fadeInUp" id="main" class="main" role="main" name="users">
+
+    <div class="col-xs-12">
+        <div class="leftside" [style.display]="displaycomponent">
+            <!-- Page Title -->
+            <div class="pagetitle">
+                <h1><i class="bx bxs-user-account"></i> {{title}}</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/"><i class="fa fa-home"></i> Inicio</a></li>
+                        <!-- <li class="breadcrumb-item"><a routerLink="/dashboard/configuraciones">Configuraciones</a></li> -->
+                        <li class="breadcrumb-item active">{{title}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- End Page Title -->
+            <div class="buton">
+                <button class="btn btn-outline-danger pull-right" href="javascript:void(0)" (click)="goBack()">Volver</button>
+            </div>
+        </div>
+        
+        <div class="clear"></div>
+
+
+
+        <section class="section dashboard">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- {{planSeleccionado.name}} -->
+                            <h4 class="card-title" *ngIf="categorySeleccionado">{{title}}: </h4>
+                            <h4 class="card-title" *ngIf="!categorySeleccionado">{{title}}</h4>
+                            <form class="form p-t-20 form-horizontal form-material" [formGroup]="categoryForm" (submit)="updateCategory()">
+                                <div class="form-group" style="margin-bottom: 25px;">
+                                    <label for="exampleInputuname">Nombre<span class="required">*</span></label>
+                                    <div class="input-group">
+
+                                        <input type="text" formControlName="nombre" class="form-control" id="exampleInputuname" placeholder="Nombre" (blur)="verificarSpeciality($event)"  required>
+
+                                        <!-- Contenedor único de validaciones -->
+                                        <div *ngIf="categoryForm.get('nombre')?.touched || categoryForm.get('nombre')?.dirty"
+                                            class="text-danger mt-1 small">
+                                            <div *ngIf="categoryForm.get('nombre')?.errors?.['required']">
+                                                * Campo Requerido
+                                            </div>
+                                            <div *ngIf="categoryForm.get('nombre')?.errors?.['minlength']">
+                                                * Mínimo 3 Caracteres
+                                            </div>
+                                            <!-- Esta es la línea que debe activarse cuando el backend devuelva true -->
+                                            <small *ngIf="specialityExiste" class="text-danger mt-1 d-block small">
+                                                * Este nombre ya está registrado.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" [disabled]="categoryForm.invalid" class="btn btn-success waves-effect waves-light m-r-10 btn-block">
+                                    <i class="fa fa-save"></i> Guardar cambios
+                                    </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <div class="row">
+                        <div class="col-lg-12" *ngIf="msm_error">
+                            <div class="alert alert-primary alert-danger fade show" role="alert">
+                                <span class="font-weight-medium">Mensaje:</span> {{msm_error}}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="close_alert()">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                            </div>
+                        </div>
+                        <app-loading *ngIf="isLoading"></app-loading>
+                        <div class="col-lg-12 card" *ngIf="!isLoading">
+                            <div class="table-responsive table-sm">
+                                <table class="table table-sm">
+                                    <thead class="thead-dark">
+                                        <tr>
+    
+                                            <th>Nombre</th>
+                                            <th>OP</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody  style="overflow: hidden;  overflow-y: scroll; height: 220px;">
+                                        <tr *ngFor="let category of categories">
+                                            <td style="font-size: 13px;">{{category.nombre}}</td>
+                                            <td class="text-nowrap text-center">
+
+                                                <a [style.display]="displaycomponent" [routerLink]="['/dashboard/category/edit', category._id]" class="cursor" data-toggle="tooltip" data-original-title="Edit">
+                                                    <i class="fa fa-edit text-success" style="font-size: 18px;"></i>
+                                                </a>
+                                                <a (click)="eliminarCategory(category._id)" class="cursor" data-toggle="tooltip" data-original-title="Borrar">
+                                                    <i class="fa fa-trash text-danger" style="font-size: 18px; margin-left: 10px; margin-right: 10px;"></i>
+                                                </a>
+                                            </td>
+                                            <!-- <td class="text-center">
+                                                <a class="nav-link-style text-danger" data-toggle="modal" [attr.data-target]="'#delete-'+item._id" style="cursor:pointer">
+                                                    <div class="fa fa-trash-o"></div>
+                                                </a>
+
+                                                
+                                                <div class="modal fade" [attr.id]="'delete-'+item._id" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Confirmación</h4>
+                                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p class="font-size-sm">¿Desea eliminar definitivamente el regsitro?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                                                                <button class="btn btn-primary btn-shadow btn-sm" type="button" (click)="eliminar(item._id)">Suprimir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+</div>
+<!--/main-->

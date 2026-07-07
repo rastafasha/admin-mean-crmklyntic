@@ -1,0 +1,224 @@
+.pagetitle h1 {
+    float: left;
+}
+
+.listapermisos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.listapermisos .label,
+.label {
+    width: 100%;
+}
+
+.listapermisos .item ul {
+    /* height: 520px; */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    column-count: 2;
+}
+
+.listapermisos .item ul li {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    column-count: 2;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-bottom: 10px px;
+}
+
+.listapermisos .item b {
+    color: var(--azul);
+}
+
+.form-horizontal input.picture {
+    width: 169px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 30px;
+}
+
+.fichasmall {
+    display: flex;
+    flex-direction: column;
+}
+
+.inffichasmall {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+
+.listgridHistorial,
+.listgrid{
+    display: grid;
+    width: 100%;
+    float: left;
+    height: auto;
+}
+
+.imagenblog{
+    grid-area: 1 / 1 / 1 / 1;
+}
+.titulourl{
+    grid-area: 1 / 2 / 2 / 2;
+
+}
+.date{
+    grid-area: 2 / 2 / 2 / 2;
+    margin-top: -20px;
+}
+.monto{
+    grid-area: 3 / 2 / 4 / 2;
+    /* margin-top: -30px; */
+}
+.status{
+    grid-area: 4 / 2 / 4 / 2;
+    /* margin-top: -30px; */
+}
+
+.listgridSubcripcione{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 14px;
+    background-color: #fafafa;
+    width: 43%;
+    float: left;
+    box-sizing: content-box;
+    margin: 3px;
+}
+
+
+@media(min-width:1024px) {
+    .listapermisos {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .listapermisos .item ul {
+        height: auto;
+        flex-wrap: nowrap;
+        column-count: 1;
+    }
+    .fichasmall {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .inffichasmall {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .dragNDrop .div1 {
+        width: 10rem !important;
+    }
+
+    .listgridHistorial{
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        grid-template-rows: repeat(5, auto);
+        grid-column-gap: 14px;
+        grid-row-gap: 0px;
+        text-align: left;
+        justify-content: flex-start;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        width: 44%;
+        float: left;
+        margin: 5px;
+        box-sizing: content-box;
+    }
+
+    .listgrid{
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        grid-template-rows: repeat(2, auto);
+        grid-column-gap: 14px;
+        grid-row-gap: 0px;
+        text-align: left;
+        justify-content: flex-start;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        width: 44%;
+    float: left;
+    height: 140px;
+    margin: 5px;
+    box-sizing: content-box;
+    }
+}
+
+@media(max-width:768px) {
+    .listapermisos {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .listapermisos .item ul {
+        height: auto;
+        flex-wrap: nowrap;
+        column-count: 1;
+    }
+    .fichasmall {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .inffichasmall {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        padding-left: 20px;
+    }
+}
+
+.profile .profile-edit img {
+    max-width: auto !important;
+}
+
+@media (min-width: 768px) {
+    .col-md-6 {
+        float: left;
+        padding: 5px;
+    }
+    .col-md-3 {
+        height: 100vh;
+    }
+    .redes .row {
+        display: flex;
+        flex-direction: column;
+        float: left;
+        height: 80px;
+    }
+    .redes label {
+        display: flex;
+    }
+    .redes label i {
+        display: flex;
+        margin-right: 11px;
+    }
+    .code img {
+        object-fit: contain;
+        width: 200px !important;
+        display: flex;
+    }
+}
+
+@media(max-width:480px) {
+    .fichasmall {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .profile .profile-card img {
+        max-width: 70px;
+    }
+}

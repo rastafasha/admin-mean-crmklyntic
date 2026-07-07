@@ -1,0 +1,267 @@
+.formcompr {
+    display: grid;
+    grid-template-columns: repeat(3, 0.5fr);
+    grid-template-rows: repeat(5, 0.4fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.div1 {
+    grid-area: 1 / 1 / 3 / 2;
+}
+
+.div2 {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.div3 {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.div4 {
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+.div5 {
+    grid-area: 2 / 3 / 3 / 4;
+}
+
+.div6 {
+    grid-area: 3 / 2 / 3 / 3;
+}
+
+.div7 {
+    grid-area: 3 / 3 / 3 / 3;
+}
+
+.div8 {
+    grid-area: 4 / 3 / 4 / 2;
+}
+
+.div9 {
+    grid-area: 4 / 4 / 4 / 3;
+}
+
+.instruccioness {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    float: left;
+    height: 390px;
+}
+
+.imagenypaypal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    float: left;
+}
+
+.formcompr .form-group {
+    display: flex;
+    float: left;
+    padding: 5px;
+    margin: 0;
+    box-sizing: inherit;
+    flex-direction: column;
+    align-items: start;
+    align-self: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.formcompr label {
+    font-size: 14px;
+}
+
+.formcompr .form-group label {
+    padding-left: 5px;
+}
+
+.vibiblepayp {
+    display: none;
+}
+
+.vibiblepaypblok {
+    display: block;
+}
+
+.instruccioness img,
+.instruccioness .info {
+    display: flex;
+    float: left;
+    flex-direction: row;
+    align-items: center;
+    align-self: center;
+    flex-wrap: wrap;
+    width: 60%;
+    padding: 5px;
+}
+
+.instruccioness img {}
+
+.instruccioness b,
+.datos b,
+.instruccioness h3,
+.datos h3 {
+    color: var(--azul);
+}
+
+.datos h3 {
+    width: 100%;
+}
+
+.carousel-indicators .active {
+    opacity: 1;
+    background-color: red;
+}
+
+.datosTranf {
+    display: grid;
+    grid-template-columns: repeat(30%, 1fr);
+    grid-auto-flow: column;
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    padding-top: 30px;
+}
+
+.datosTranf .datos {
+    display: flex;
+    float: left;
+    padding: 5px;
+    margin: 0;
+    box-sizing: content-box;
+    flex-direction: inherit;
+    align-items: start;
+    align-self: flex-start;
+    flex-wrap: wrap;
+}
+
+.datosTranf .datos h3 {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+.datosTranf .datos p {
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: wrap;
+    width: 100%;
+}
+
+.info ol li {
+    font-size: 14px;
+}
+
+.info h2 {
+    padding-left: 4%;
+    color: var(--azul);
+    font-size: 40px;
+    padding-top: 14px;
+}
+
+.info p {
+    padding-left: 20%;
+}
+
+.info ul {
+    display: inline-flex;
+    list-style: none;
+}
+
+.info ul li {
+    font-size: 16px;
+    margin-right: 10px;
+    background-color: #f9f8f8 !important;
+    color: var(--azul);
+}
+
+.formPagar {
+    display: flex;
+    flex-direction: column;
+}
+
+.formPagar .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    align-self: center;
+}
+
+.form-group .form-check,
+.form-group .form-check-label {
+    background-color: transparent;
+    width: 100%;
+    padding: 5px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.form-group .form-check:hover,
+.form-group .form-check-label:hover {
+    background-color: rgba(248, 248, 248, 0.256);
+    padding: 5px;
+}
+
+.pagarinfo {
+    background-image: url('/assets/img/pexels-pixabay-35550.jpeg');
+}
+
+.pagarinfo {
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media(max-width:768px) {
+    .datosTranf {
+        display: grid;
+        grid-auto-flow: row;
+    }
+    .datosTranf .datos {
+        padding-bottom: 20px;
+        padding-top: 20px;
+        border-bottom: 1px solid #ccc;
+    }
+    .instruccioness img,
+    .instruccioness .info {
+        width: 100%;
+    }
+    .info h2 {
+        padding-left: 0%;
+    }
+    .info ul {
+        flex-direction: column;
+        flex-flow: wrap;
+        justify-content: space-between;
+    }
+    .formcompr {
+        display: grid;
+        grid-template-columns: repeat(1, 0.5fr);
+        grid-template-rows: repeat(1, 0.4fr);
+    }
+}
+
+@media(max-width:480px) {
+    .info h2 {
+        font-size: 25px;
+        padding-top: 14px;
+    }
+    .formcompr {
+        display: flex;
+        flex-direction: column;
+    }
+    .instruccioness img,
+    .instruccioness .info {
+        height: auto;
+        width: 90%;
+    }
+    .instruccioness {
+        height: 550px;
+        width: 100%;
+    }
+}
