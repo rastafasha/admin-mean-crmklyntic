@@ -42,7 +42,7 @@
                                     </div>
 
                                 </div>
-                                
+
                                 <div class="col-xs-12 col-md-4 mb-2">
                                     <label>Instagram<span class="required">*</span></label>
                                     <input type="text" formControlName="rrss" class="form-control">
@@ -62,15 +62,15 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-4 mb-2">
-                                    <label>Categoría<span class="required">*</span></label>
+                                    <label>Especialidad<span class="required">*</span></label>
                                     <div class="input-group">
-                                        <select class="form-control" formControlName="category">
+                                        <select class="form-control" formControlName="speciality">
                                             <option value="">Seleccione</option>
                                             <option *ngFor="let data of specialities" [value]="data._id">
                                                 {{data.nombre}}
                                             </option>
                                         </select>
-                                        <div *ngIf="projectForm.get('category')?.touched && projectForm.get('category')?.errors?.['required']"
+                                        <div *ngIf="projectForm.get('speciality')?.touched && projectForm.get('speciality')?.errors?.['required']"
                                             class="text-danger">Campo Requerido</div>
                                     </div>
                                 </div>
@@ -94,16 +94,7 @@
                                         class="text-danger">Campo Requerido</div>
 
                                 </div>
-                                <div class="col-xs-12 col-md-4">
-                                    <div class="form-check">
-                                        <label>Tiene Menú <span class="required">*</span></label>
-                                        <input class="form-check-input" formControlName="hasMenu" type="checkbox"
-                                            id="flexCheckhasMenu">
-                                        <label class="form-check-label" for="flexCheckhasMenu">
-                                            ¿Tiene Menú ? <span class="required">*</span>
-                                        </label>
-                                    </div>
-                                </div>
+
 
                                 <div class="clear"></div>
                                 <br>
@@ -111,9 +102,9 @@
 
 
                                     <div class="col-xs-12 col-md-4">
-                                        <label>Tipo Menu <span class="required">*</span></label>
-                                        <input type="text" formControlName="tipoMenu" class="form-control">
-                                        <div *ngIf="projectForm.get('tipoMenu')?.touched && projectForm.get('tipoMenu')?.errors?.['required']"
+                                        <label>Consultorio/Clinica<span class="required">*</span></label>
+                                        <input type="text" formControlName="tipoClinica" class="form-control">
+                                        <div *ngIf="projectForm.get('tipoClinica')?.touched && projectForm.get('tipoClinica')?.errors?.['required']"
                                             class="text-danger">Campo Requerido</div>
 
                                     </div>
@@ -226,11 +217,13 @@
                             <div class="row mb-3">
                                 <div class="col-xs-12 col-md-6">
                                     <label>propuesta </label>
-                                    <textarea formControlName="propuesta" id="propuesta"class="form-control"></textarea>
+                                    <textarea formControlName="propuesta" id="propuesta"
+                                        class="form-control"></textarea>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
                                     <label>negociacion </label>
-                                    <textarea formControlName="negociacion" id="negociacion" class="form-control"></textarea>
+                                    <textarea formControlName="negociacion" id="negociacion"
+                                        class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="clear"></div>
@@ -256,12 +249,12 @@
                             </div>
                             <div class="clear"></div>
                             <div class="row mb-3">
-                                  <div class="col-xs-12 col-md-4">
+                                <div class="col-xs-12 col-md-4">
                                     <label>Email Contacto </label>
-                                    <input type="text" formControlName="email_contacto" class="form-control" >
+                                    <input type="text" formControlName="email_contacto" class="form-control">
 
                                 </div>
-                                  <div class="col-xs-12 col-md-4">
+                                <div class="col-xs-12 col-md-4">
                                     <label>Canal Origen </label>
                                     <select class="form-control selecttyp" formControlName="canal_origen">
                                         <option value="">Seleccione</option>
@@ -284,13 +277,14 @@
                             </div>
                             <div class="clear"></div>
                             <div class="row mb-3">
-                                  <div class="col-xs-12 ">
+                                <div class="col-xs-12 ">
                                     <label>Correo Enviado</label>
-                                    <textarea formControlName="correo_enviado" id="correo_enviado"class="form-control"></textarea>
+                                    <textarea formControlName="correo_enviado" id="correo_enviado"
+                                        class="form-control"></textarea>
                                 </div>
                             </div>
-                            
-                            
+
+
 
                             <div class="row">
                                 <div class="col-6">

@@ -16,11 +16,15 @@ export class Doctor {
     rrss: string;
     address: string;
     terminos: string;
+    
+    //crm
+    name: string;
+    ubicacion: string;
+    hasVisited: string;
+    tipoClinica: string;
 
-    type: ProjectType;
     pais: Pais;
     notificado: boolean;
-    hasVisited: boolean;
     status: boolean;
     propuesta: string;
     negociacion: string;

@@ -36,15 +36,15 @@ export class DoctorService {
   }
 
   getProjects() {
-    const url = `${baseUrl}/projects/`;
+    const url = `${baseUrl}/doctors/`;
     return this.http.get<any>(url, this.headers)
       .pipe(
-        map((resp: { ok: boolean, projects: Doctor[] }) => resp.projects)
+        map((resp: { ok: boolean, doctors: Doctor[] }) => resp.doctors)
       )
   }
 
  getProjectsByCategory(categoryName: string, estado?: string) {
-    const url = `${baseUrl}/projects/category/${categoryName}`;
+    const url = `${baseUrl}/doctors/speciality/${categoryName}`;
     
     // Configuramos los parámetros de la URL de forma limpia
     let params = new HttpParams();

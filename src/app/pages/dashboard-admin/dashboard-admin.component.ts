@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
     standalone: false
 })
 export class DashboardAdminComponent implements OnInit {
-  @Input() projects: Doctor[] = [];
+  @Input() doctors: Doctor[] = [];
 
   title = 'Panel Administrativo';
   public user: any;
@@ -52,7 +52,7 @@ export class DashboardAdminComponent implements OnInit {
 
   getProjectsData(){
     this.projectService.getProjects().subscribe((resp:any)=>{
-      this.projects = resp;
+      this.doctors = resp;
     })
   }
 
@@ -66,7 +66,7 @@ export class DashboardAdminComponent implements OnInit {
   subscribeToFilteredProjects() {
     this.projectService.filteredDoctors$.subscribe((filteredProjects: Doctor[]) => {
       if (filteredProjects && filteredProjects.length > 0) {
-        this.projects = filteredProjects;
+        this.doctors = filteredProjects;
       } else {
         this.getProjectsData();
       }

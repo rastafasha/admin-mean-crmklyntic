@@ -74,7 +74,7 @@
 
                         <div class="contenido ">
                             <div class="item "
-                                *ngFor="let project of projects |  paginate: { itemsPerPage: count, currentPage: p }">
+                                *ngFor="let project of doctors |  paginate: { itemsPerPage: count, currentPage: p }">
                                 <app-projectitem [project]="project" (onEditProject)="onEditProject($event)"
                                     (onDelete)="onDeleteProject($event)"></app-projectitem>
                             </div>

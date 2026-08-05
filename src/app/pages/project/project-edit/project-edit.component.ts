@@ -90,16 +90,15 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         num_whatsapp: project.num_whatsapp,
         url: project.url,
         rrss: project.rrss,
-        category: project.category._id,
+        speciality: project.speciality._id,
         ubicacion: project.ubicacion,
         pais: project.pais._id,
         hasVisited: project.hasVisited,
         negociacion: project.negociacion,
         propuesta: project.propuesta,
-        hasMenu: project.hasMenu,
         dateVisita: project.dateVisita,
         dateAprobado: project.dateAprobado,
-        tipoMenu: project.tipoMenu,
+        tipoClinica: project.tipoClinica,
         notificado: project.notificado,
         status: project.status,
         estado_seguimiento: project.estado_seguimiento,
@@ -151,9 +150,8 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       slug: [''],
       num_whatsapp: [''],
       rrss: ['', Validators.required],
-      category: ['', Validators.required],
-      hasMenu: ['', Validators.required],
-      tipoMenu: ['', Validators.required],
+      speciality: ['', Validators.required],
+      tipoClinica: ['', Validators.required],
       ubicacion: ['', Validators.required],
       pais: ['', Validators.required],
       dateVisita: [''],
@@ -187,8 +185,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       num_whatsapp: null,
       rrss: null,
       category: null,
-      hasMenu: null,
-      tipoMenu: null,
+      tipoClinica: null,
       ubicacion: null,
       pais: null,
       dateVisita: null,
@@ -226,20 +223,19 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     const url = this.projectForm.get('url');
     const num_whatsapp = this.projectForm.get('num_whatsapp');
     const category = this.projectForm.get('category');
-    const hasMenu = this.projectForm.get('hasMenu');
     const pais = this.projectForm.get('pais');
     const rrss = this.projectForm.get('rrss');
     const ubicacion = this.projectForm.get('ubicacion');
-    const tipoMenu = this.projectForm.get('tipoMenu');
+    const tipoClinica = this.projectForm.get('tipoClinica');
     const dateVisita = this.projectForm.get('dateVisita');
     const dateAprobado = this.projectForm.get('dateAprobado');
     const hasVisited = this.projectForm.get('hasVisited');
 
     if (name?.invalid || url?.invalid ||
       num_whatsapp?.invalid || category?.invalid ||
-      hasMenu?.invalid || pais?.invalid ||
+       pais?.invalid ||
       rrss?.invalid || ubicacion?.invalid ||
-      tipoMenu?.invalid ||
+      tipoClinica?.invalid ||
       dateVisita?.invalid ||
       dateAprobado?.invalid ||
       hasVisited?.invalid 
@@ -249,11 +245,10 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       url?.markAsTouched();
       num_whatsapp?.markAsTouched();
       category?.markAsTouched();
-      hasMenu?.markAsTouched();
       pais?.markAsTouched();
       rrss?.markAsTouched();
       ubicacion?.markAsTouched();
-      tipoMenu?.markAsTouched();
+      tipoClinica?.markAsTouched();
       dateVisita?.markAsTouched();
       dateAprobado?.markAsTouched();
       hasVisited?.markAsTouched();

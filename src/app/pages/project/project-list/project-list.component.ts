@@ -24,7 +24,7 @@ export class ProjectListComponent implements OnInit {
   selectedEstado: string = '';
 
   title: string = 'Proyectos';
-  projects: Doctor[];
+  doctors: Doctor[];
   query: string = '';
   p: number = 1;
   count: number = 6;
@@ -72,7 +72,7 @@ export class ProjectListComponent implements OnInit {
   getProjects() {
     this.loading = true;
     this.projectService.getProjects().subscribe((resp: any) => {
-      this.projects = resp;
+      this.doctors = resp;
       this.loading = false;
     })
   }
@@ -80,7 +80,7 @@ export class ProjectListComponent implements OnInit {
   getProjectsByUser(id: string) {
     this.loading = true;
     this.projectService.getByUser(id).subscribe((resp: any) => {
-      this.projects = resp;
+      this.doctors = resp;
       this.loading = false;
     })
   }
@@ -131,7 +131,7 @@ export class ProjectListComponent implements OnInit {
     if (this.selectedType) {
       return this.projectService.getProjectsByCategory(this.selectedType, this.selectedEstado)
         .subscribe((resp: any) => {
-          this.projects = resp;
+          this.doctors = resp;
           this.projectService.emitFilteredDoctors(resp);
         });
     } 
@@ -139,8 +139,8 @@ export class ProjectListComponent implements OnInit {
     else if (this.selectedEstado) {
       return this.busquedasService.searchByCollection('doctors', '', this.selectedEstado)
         .subscribe((resp: any) => {
-          this.projects = resp.resultados || [];
-          this.projectService.emitFilteredDoctors(this.projects);
+          this.doctors = resp.resultados || [];
+          this.projectService.emitFilteredDoctors(this.doctors);
         });
     } 
     // Subcaso C: Sin filtros seleccionados
@@ -162,7 +162,7 @@ export class ProjectListComponent implements OnInit {
           );
         }
 
-        this.projects = filteredProjects;
+        this.doctors = filteredProjects;
         this.projectService.emitFilteredDoctors(filteredProjects);
       });
   }

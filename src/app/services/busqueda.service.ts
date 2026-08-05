@@ -63,6 +63,7 @@ export class BusquedasService {
 
           case 'doctors':
             return this.trasnformarDoctors(resp.resultados);
+            
           case 'specialities':
             return this.trasnformarSpecialities(resp.resultados);
 

@@ -9,7 +9,7 @@ const base_url = environment.mediaUrlRemoto;
 })
 export class ImagenPipe implements PipeTransform {
 
-  transform(img: string, tipo: 'profiles'|'projects'): string {
+  transform(img: string, tipo: 'doctors'): string {
 
     if(!img){
       return `assets/images/no-image.jpg`;
