@@ -3,7 +3,7 @@
       <div class="topeproject">
         <img [src]="(project?.img||'') | imagenPipe:'doctors'" alt="">
         <div class="datos ">
-          <h5 class="card-title fw-bold text-dark m-0 p-0">{{ project.nombre }}</h5>
+          <h5 class="card-title fw-bold text-dark m-0 p-0">{{ project.name }}</h5>
         </div>
         <span class="badge bg-primary text-white small">{{ project.speciality.nombre }}</span>
 
@@ -40,6 +40,18 @@
                 Ubicación: {{ project.ciudad }}
               </span>
             </div>
+            <div class="d-flex align-items-center">
+              <i class="fa fa-map-pin"></i>&nbsp; &nbsp;
+              <span class="text-secondary">
+                Laboratorio?: {{ project.hasLaboratory === true ? 'Si' : 'No' }}
+              </span>
+            </div>
+            <div class="d-flex align-items-center" >
+              <i class="fa fa-map-pin"></i>&nbsp; &nbsp;
+              <span class="text-secondary">
+                tipoClinica: {{ project.tipoClinica }}
+              </span>
+            </div>
             <div class="d-flex align-items-center" *ngIf="project.phone">
               <i class="fa fa-map-pin"></i>&nbsp; &nbsp;
               <span class="text-secondary">
@@ -53,6 +65,12 @@
               </span>
             </div>
             
+            <div class="d-flex align-items-center">
+              <i class="fa fa-book"></i>&nbsp;&nbsp;
+              <span class="text-secondary">
+                Estado App: {{ project.statusapp }}
+              </span>
+            </div>
             <div class="d-flex align-items-center">
               <i class="fa fa-book"></i>&nbsp;&nbsp;
               <span class="text-secondary">

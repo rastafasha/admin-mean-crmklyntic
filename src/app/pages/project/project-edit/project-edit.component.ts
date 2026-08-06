@@ -6,6 +6,7 @@ import {
   OnChanges,
   Output,
   EventEmitter,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -54,6 +55,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
   isLoading: boolean = false;
   currentStep = 1;
   cargandoImagen = false;
+  projectExiste = false
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +65,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     private paisService: PaisService,
     private categoryService: SpecialityService,
     private fileUploadService: FileUploadService,
+    private cd: ChangeDetectorRef
   ) {
 
   }
@@ -101,6 +104,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         tipoClinica: project.tipoClinica,
         notificado: project.notificado,
         status: project.status,
+        hasLaboratory: project.hasLaboratory,
         estado_seguimiento: project.estado_seguimiento,
         email_contacto: project.email_contacto,
         canal_origen: project.canal_origen,
@@ -165,6 +169,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       status: [false],
       hasVisited: [false],
       notificado: [false],
+      hasLaboratory: [false],
       partners: this.fb.array([],),
       // img: [''],
       id: [''],
@@ -269,6 +274,60 @@ export class ProjectEditComponent implements OnInit, OnChanges {
   }
   prevStep2() {
     this.currentStep = 2;
+  }
+
+
+  verificarProject(event: any): void {
+    const documento = event.target.value?.trim();
+    const control = this.projectForm.get('name');
+
+    // 1. Si está vacío o tiene menos de 3 caracteres, limpiamos el error 'yaExiste'
+    // y dejamos que Angular ejecute sus validadores nativos normales.
+    if (!documento || documento.length < 3) {
+      this.projectExiste = false;
+      if (control?.hasError('yaExiste')) {
+        delete control.errors?.['yaExiste'];
+        control.updateValueAndValidity(); // 👈 Fuerza a Angular a recalcular required/minlength
+      }
+      return;
+    }
+
+    // 2. Consultamos al backend si pasa los filtros básicos
+    this.projectService.veriificarExistencia(documento).subscribe({
+      next: (res: any) => {
+        const control = this.projectForm.get('name');
+
+        if (res && res.exists) {
+          this.projectExiste = true;
+
+          // Conservamos errores previos y sumamos 'yaExiste'
+          const erroresActuales = control?.errors || {};
+          control?.setErrors({ ...erroresActuales, yaExiste: true });
+
+          // CORREGIDO: Usamos onlySelf en lugar del error de tipeo
+          control?.markAsTouched({ onlySelf: true });
+          control?.markAsDirty();
+        } else {
+          this.projectExiste = false;
+          if (control?.errors) {
+            delete control.errors['yaExiste'];
+            if (Object.keys(control.errors).length === 0) {
+              control.setErrors(null);
+            } else {
+              control.setErrors(control.errors);
+            }
+          }
+        }
+
+        // Recalculamos validez y forzamos el renderizado visual en la pantalla
+        control?.updateValueAndValidity({ emitEvent: true });
+        this.projectForm.updateValueAndValidity();
+        this.cd.detectChanges(); // 👈 LA LÍNEA MÁGICA: Fuerza a Angular a pintar el HTML ya mismo
+      },
+      error: (err) => {
+        console.error("Error al verificar el documento", err);
+      }
+    });
   }
 
 

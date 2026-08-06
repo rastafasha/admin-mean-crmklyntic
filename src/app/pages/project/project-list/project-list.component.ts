@@ -140,6 +140,7 @@ export class ProjectListComponent implements OnInit {
       return this.busquedasService.searchByCollection('doctors', '', this.selectedEstado)
         .subscribe((resp: any) => {
           this.doctors = resp.resultados || [];
+          console.log(resp)
           this.projectService.emitFilteredDoctors(this.doctors);
         });
     } 

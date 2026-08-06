@@ -60,6 +60,10 @@ export class DoctorService {
         map((resp: { ok: boolean, doctors: Doctor[] }) => resp.doctors)
     );
 }
+ veriificarExistencia(name: string) {
+    const url = `${baseUrl}/doctors/existencia/${name}`;
+    return this.http.get<any>(url, this.headers);
+  }
 
   getDoctor(_id: string) {
     const url = `${baseUrl}/doctors/${_id}`;

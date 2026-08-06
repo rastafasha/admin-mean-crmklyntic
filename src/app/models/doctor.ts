@@ -26,6 +26,7 @@ export class Doctor {
     pais: Pais;
     notificado: boolean;
     status: boolean;
+    hasLaboratory: boolean;
     propuesta: string;
     negociacion: string;
     dateVisita: Date;
