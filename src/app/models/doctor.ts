@@ -32,7 +32,7 @@ export class Doctor {
     dateVisita: Date;
     dateAprobado: Date;
     partners: User;
-    statusapp: 'TEST'| 'SUSCRITO';
+    statusapp: 'TEST'| 'SUSCRITO'|'PENDIENTE';
     estado_seguimiento: 'PENDIENTE'| 'INTERESADO_ESPERA_DATOS'|'CORREO_ENVIADO'| 'RECHAZADO';
     email_contacto: string;
     canal_origen: string;
