@@ -164,7 +164,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       negociacion: [''],
       propuesta: [''],
       estado_seguimiento: ['PENDIENTE'],
-      statusapp: [''],
+      statusapp: ['PENDIENTE'],
       email_contacto: [''],
       canal_origen: [''],
       correo_enviado: [''],
