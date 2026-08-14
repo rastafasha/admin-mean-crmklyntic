@@ -28,6 +28,14 @@
                                             {{data.nombre}}
                                         </option>
                                     </select>
+                                    
+                                    <select class="form-control selecttyp" [(ngModel)]="selectedtipoClinica" name="tipoClinica"
+                                        (change)="search()">
+                                        <option value="">Seleccione Tipo</option>
+                                            <option value="Consultorio">Consultorio</option>
+                                            <option value="Clinica">Clínica</option>
+                                    </select>
+
                                     <select class="form-control selecttyp" [(ngModel)]="selectedEstado" name="estado_seguimiento"
                                         (change)="search()">
                                         <option value="">Seleccione Estado</option>

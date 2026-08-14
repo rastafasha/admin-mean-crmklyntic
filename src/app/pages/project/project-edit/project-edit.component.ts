@@ -407,7 +407,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
   subirImagen() {
     this.cargandoImagen = true;
     this.fileUploadService
-      .actualizarFoto(this.imagenSubir, 'projects', this.projectSeleccionado._id)
+      .actualizarFoto(this.imagenSubir, 'doctors', this.projectSeleccionado._id)
       .then(img => {
         this.projectSeleccionado.img = img;
         this.cargandoImagen = false;

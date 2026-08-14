@@ -74,13 +74,16 @@ export class BusquedasService {
     );
   }
 
-  searchGlobal(termino: string, estado?: string) {
+  searchGlobal(termino: string, estado?: string, tipo?:string) {
     const url = `${base_url}/todo/${termino}`;
     
     // Configuramos los parámetros de la URL de forma limpia
     let params = new HttpParams();
     if (estado) {
         params = params.set('estado_seguimiento', estado);
+    }
+     if (tipo) {
+        params = params.set('tipoClinica', tipo);
     }
 
     // Pasamos los params dentro del objeto de configuración junto a los headers
@@ -90,7 +93,7 @@ export class BusquedasService {
     });
 }
 
-searchByCollection(tabla: string, termino: string = '', estado?: string) {
+searchByCollection(tabla: string, termino: string = '', estado?: string, tipo?:string) {
     // Si el término va vacío, usamos un string por defecto o espacio para que Express no rompa la URL
     const searchParam = termino.trim() === '' ? 'all' : termino;
     const url = `${base_url}/todo/coleccion/${tabla}/${searchParam}`;
@@ -98,6 +101,9 @@ searchByCollection(tabla: string, termino: string = '', estado?: string) {
     let params = new HttpParams();
     if (estado) {
         params = params.set('estado_seguimiento', estado);
+    }
+    if (tipo) {
+        params = params.set('tipoClinica', tipo);
     }
 
     return this.http.get<any>(url, {

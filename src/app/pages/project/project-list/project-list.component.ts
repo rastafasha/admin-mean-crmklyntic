@@ -22,6 +22,7 @@ export class ProjectListComponent implements OnInit {
 
   selectedType: string = '';
   selectedEstado: string = '';
+  selectedtipoClinica: string = '';
 
   title: string = 'Proyectos';
   doctors: Doctor[];
@@ -122,11 +123,10 @@ export class ProjectListComponent implements OnInit {
     });
 
   }
-
-  search() {
+search() {
   // CASO 1: No hay término de búsqueda escrito en el input
   if (!this.query || this.query.trim() === '') {
-    
+
     // Subcaso A: Seleccionó una categoría (con o sin estado)
     if (this.selectedType) {
       return this.projectService.getProjectsByCategory(this.selectedType, this.selectedEstado)
@@ -134,26 +134,48 @@ export class ProjectListComponent implements OnInit {
           this.doctors = resp;
           this.projectService.emitFilteredDoctors(resp);
         });
-    } 
-    // Subcaso B: NO hay categoría, pero SÍ hay un estado seleccionado (Usa el nuevo método seguro)
+    }
+    
+    // NUEVO Subcaso B: Seleccionó Tipo de Clínica Y Estado al mismo tiempo
+    // (Asegúrate de que tu servicio 'searchByCollection' acepte un 4to parámetro para tipoClinica)
+    else if (this.selectedEstado && this.selectedtipoClinica) {
+      return this.busquedasService.searchByCollection('doctors', '', this.selectedEstado, this.selectedtipoClinica)
+        .subscribe((resp: any) => {
+          this.doctors = resp.resultados || [];
+          this.projectService.emitFilteredDoctors(this.doctors);
+        });
+    }
+
+    // Subcaso C: SÓLO hay tipo de clínica
+    else if (this.selectedtipoClinica) {
+      // OJO: Si el 3er parámetro es el estado, envía null/vacío antes de la clínica
+      return this.busquedasService.searchByCollection('doctors', '', null, this.selectedtipoClinica)
+        .subscribe((resp: any) => {
+          this.doctors = resp.resultados || [];
+          console.log(resp);
+          this.projectService.emitFilteredDoctors(this.doctors);
+        });
+    }
+
+    // Subcaso D: SÓLO hay un estado seleccionado
     else if (this.selectedEstado) {
       return this.busquedasService.searchByCollection('doctors', '', this.selectedEstado)
         .subscribe((resp: any) => {
           this.doctors = resp.resultados || [];
-          console.log(resp)
           this.projectService.emitFilteredDoctors(this.doctors);
         });
-    } 
-    // Subcaso C: Sin filtros seleccionados
+    }
+    
+    // Subcaso E: Sin filtros seleccionados
     else {
       this.ngOnInit();
       return;
     }
-  } 
+  }
 
   // CASO 2: Sí hay un término de búsqueda en el input de texto
   else {
-    return this.busquedasService.searchGlobal(this.query, this.selectedEstado)
+    return this.busquedasService.searchGlobal(this.query, this.selectedEstado, this.selectedtipoClinica)
       .subscribe((resp: any) => {
         let filteredProjects = resp.projects || [];
 
@@ -174,10 +196,12 @@ export class ProjectListComponent implements OnInit {
 
 
 
+
   PageSize() {
     this.query = '';
     this.selectedType = '';
     this.selectedEstado = '';
+    this.selectedtipoClinica = '';
     this.ngOnInit();
 
   }

@@ -17,7 +17,7 @@ export class BusquedaComponent implements OnInit {
 
   
 
-  projects: Doctor;
+  doctors: Doctor;
   // projecttypes: ProjectType;
   usuarios: User;
   clientes: Cliente;
@@ -44,7 +44,7 @@ export class BusquedaComponent implements OnInit {
     this.busquedasService.searchGlobal(termino).subscribe(
       (resp:any) => {
         this.usuarios = resp.usuarios;
-        this.projects = resp.projects;
+        this.doctors = resp.doctors;
         this.clientes = resp.clientes;
         // this.projecttypes = resp.projecttypes;
       }
@@ -59,7 +59,7 @@ export class BusquedaComponent implements OnInit {
       return this.busquedasService.searchGlobal(this.query).subscribe(
         (resp:any) => {
           this.usuarios = resp.usuarios;
-          this.projects = resp.projects;
+          this.doctors = resp.doctors;
           this.clientes = resp.clientes;
           // this.projecttypes = resp.projecttypes;
       
