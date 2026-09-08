@@ -30,6 +30,7 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
 import { ProjectModule } from './project/project.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { PaymentsModule } from './payment/payments.module';
+import { RecursoModule } from './recurso/recurso.module';
 
 @NgModule({ declarations: [
         DashboardComponent,
@@ -52,7 +53,8 @@ import { PaymentsModule } from './payment/payments.module';
         PagesComponent,
         UserProfileComponent,
         BusquedaComponent
-    ], imports: [CommonModule,
+    ], imports: [
+        CommonModule,
         SharedModule,
         ReactiveFormsModule,
         FormsModule,
@@ -62,6 +64,7 @@ import { PaymentsModule } from './payment/payments.module';
         ComponentsModule,
         NgxPaginationModule,
         ProjectModule,
+        RecursoModule,
         ClienteModule,
         PaymentsModule], providers: [
         provideHttpClient(withInterceptorsFromDi())

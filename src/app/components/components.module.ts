@@ -18,6 +18,7 @@ import { ConfModule } from '../pages/conf/conf.module';
 import { SharedModule } from '../shared/shared.module';
 import { ClientitemComponent } from './clientitem/clientitem.component';
 import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
+import { RecursoItemComponent } from './recurso-item/recurso-item.component';
 
 @NgModule({ declarations: [
         UsuariosRecientesComponent,
@@ -29,6 +30,7 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
         ProjecttypeeditComponent,
         ClientitemComponent,
         BarChartComponent,
+        RecursoItemComponent
     ],
     exports: [
         UsuariosRecientesComponent,
@@ -39,8 +41,10 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
         ProjectitemComponent,
         ProjecttypeeditComponent,
         ClientitemComponent,
-        BarChartComponent
-    ], imports: [CommonModule,
+        BarChartComponent,
+        RecursoItemComponent
+    ], imports: [
+        CommonModule,
         RouterModule,
         ReactiveFormsModule,
         FormsModule,

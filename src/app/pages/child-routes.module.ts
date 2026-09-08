@@ -19,6 +19,7 @@ import { PaymentsComponent } from './payment/payments.component';
 import { PaymentDetailsComponent } from './payment/payment-details/payment-details.component';
 import { ReportarPagoComponent } from './payment/reportar-pago/reportar-pago.component';
 import { AuthGuard } from '../guards/auth.guard';
+import { RecursoListComponent } from './recurso/recurso-list/recurso-list.component';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -65,7 +66,8 @@ const childRoutes: Routes = [
     { path: 'payment/edit/:id', component: ReportarPagoComponent, data:{title:'Editar Pago'} },
     { path: 'payment-detail/:id', component: PaymentDetailsComponent, data:{title:'Revisar Pago'} },
 
-  
+  { path: 'recursos', component: RecursoListComponent, data:{title:'Recursos'} },
+    
     //user
     { path: 'users', component: UsersComponent, data:{title:'Usuarios'} },
     { path: 'user/:id', component: UserProfileComponent, data:{title:'Detalle Usuario'} },
