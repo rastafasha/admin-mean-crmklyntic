@@ -56,10 +56,10 @@ const childRoutes: Routes = [
     { path: 'project/crear', component: ProjectEditComponent, data:{title:'Crear Proyecto'} },
     { path: 'project/edit/:id', component: ProjectEditComponent, data:{title:'Editar Proyecto'} },
     
-    { path: 'recursos', component: RecursoListComponent, data:{title:'Recursos'} },
-    { path: 'recursos/:id', component: RecursoListComponent, data:{title:'Recursos'} },
-    { path: 'recursos/crear', component: RecursoEditComponent, data:{title:'Crear Recurso'} },
-    { path: 'recursos/edit/:id', component: RecursoEditComponent, data:{title:'Editar Recurso'} },
+    { path: 'resources', component: RecursoListComponent, data:{title:'Recursos'} },
+    { path: 'resources/:id', component: RecursoListComponent, data:{title:'Recursos'} },
+    { path: 'resources/crear', component: RecursoEditComponent, data:{title:'Crear Recurso'} },
+    { path: 'resources/edit/:id', component: RecursoEditComponent, data:{title:'Editar Recurso'} },
 
     { path: 'clientes', component: ClientesListComponent, data:{title:'Cliente'} },
     { path: 'clientes/:id', component: ClientesListComponent, data:{title:'Cliente'} },
