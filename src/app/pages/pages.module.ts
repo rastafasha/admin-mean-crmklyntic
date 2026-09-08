@@ -64,9 +64,11 @@ import { RecursoModule } from './recurso/recurso.module';
         ComponentsModule,
         NgxPaginationModule,
         ProjectModule,
-        RecursoModule,
         ClienteModule,
-        PaymentsModule], providers: [
+        PaymentsModule,
+        RecursoModule
+    ], 
+        providers: [
         provideHttpClient(withInterceptorsFromDi())
     ] })
 export class PagesModule { }

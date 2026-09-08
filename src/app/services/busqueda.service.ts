@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { User } from '../models/user';
 import { Doctor } from '../models/doctor';
 import { Speciality } from '../models/speciality';
+import { Recurso } from '../models/recurso';
 
 const base_url = environment.apiUrl;
 
@@ -52,8 +53,12 @@ export class BusquedasService {
     return resultados;
   }
   
+  private trasnformarRecursos(resultados: any[]): Recurso[] {
+    return resultados;
+  }
+  
 
-  buscar(tipo: 'usuarios' |  'doctors'| 'specialities', termino: string) {
+  buscar(tipo: 'usuarios' |  'doctors'| 'specialities'| 'recursos', termino: string) {
     const url = `${base_url}/todo/coleccion/${tipo}/${termino}`;
     return this.http.get<any[]>(url, this.headers).pipe(
       map((resp: any) => {
@@ -66,6 +71,8 @@ export class BusquedasService {
             
           case 'specialities':
             return this.trasnformarSpecialities(resp.resultados);
+          case 'recursos':
+            return this.trasnformarRecursos(resp.resultados);
 
           default:
             return [];
