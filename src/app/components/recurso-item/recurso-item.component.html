@@ -48,7 +48,7 @@
           'btn btn-success': recurso.activo === true,
           'btn btn-danger': recurso.activo !== true
         }">
-          {{ recurso.activo === true ? 'Aprobado' : 'Inactivo' }}
+          {{ recurso.activo === true ? 'Activo' : 'Inactivo' }}
         </button>
         <div class="d-flex gap-1">
           <button href="javascript:void(0)" (click)="openEditModal(recurso)" data-bs-toggle="modal"

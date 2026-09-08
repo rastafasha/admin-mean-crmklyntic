@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
 import { User } from '../models/user';
-import { UserService } from '../services/user.service';
 
 
 // declare function customInitFunctions(); //llamammos a la funcion que carga los js
@@ -12,22 +10,13 @@ import { UserService } from '../services/user.service';
     styles: [],
     standalone: false
 })
-export class PagesComponent implements OnInit {
+export class PagesComponent {
 
   year = new Date().getFullYear();
 
   public user: User;
   id:number;
 
-
-  constructor(
-    private userService: UserService,
-    private activatedRoute: ActivatedRoute,
-  ) { }
-
-  ngOnInit(): void {
-    // this.getUser();
-  }
 
 
 

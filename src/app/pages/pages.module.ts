@@ -32,7 +32,8 @@ import { ClienteModule } from './cliente/cliente.module';
 import { PaymentsModule } from './payment/payments.module';
 import { RecursoModule } from './recurso/recurso.module';
 
-@NgModule({ declarations: [
+@NgModule({ 
+    declarations: [
         DashboardComponent,
         DashboardAdminComponent,
         PagesComponent,

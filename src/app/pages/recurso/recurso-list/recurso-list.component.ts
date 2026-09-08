@@ -15,14 +15,13 @@ import Swal from 'sweetalert2';
 })
 export class RecursoListComponent implements OnInit{
 
-  @Input() displaycomponent: string = 'block';
   @Input() limit!: number;
   @Input() userprofile!: User;
 
   selectedType: string = '';
   selectedEstado: string = '';
 
-  title: string = 'Proyectos';
+  title: string = 'Recursos';
   recursos: Recurso[];
   query: string = '';
   p: number = 1;
@@ -35,7 +34,6 @@ export class RecursoListComponent implements OnInit{
   constructor(
     private recursoService: RecursoService,
     private busquedasService: BusquedasService,
-    private activatedRoute: ActivatedRoute,
 
   ) {
     let USER = localStorage.getItem('usuario');
@@ -45,12 +43,7 @@ export class RecursoListComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe((resp: any) => {
-      this.usuario_id = resp.id;
-    })
-
     this.getRecursos();
-
   }
 
   getRecursos() {
@@ -64,12 +57,12 @@ export class RecursoListComponent implements OnInit{
 
 
 
-  onEditRecurso(project: Recurso) {
-    this.selectedRecurso = project;
+  onEditRecurso(recurso: Recurso) {
+    this.selectedRecurso = recurso;
   }
 
-  onDeleteProject(project: Recurso) {
-    this.selectedRecurso = project;
+  onDeleteRecurso(recurso: Recurso) {
+    this.selectedRecurso = recurso;
 
     Swal.fire({
       title: 'Estas Seguro?',
@@ -81,7 +74,7 @@ export class RecursoListComponent implements OnInit{
       confirmButtonText: 'Si, Borrar!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.recursoService.deleteRecurso(project._id).subscribe((resp: any) => {
+        this.recursoService.deleteRecurso(recurso._id).subscribe((resp: any) => {
           this.getRecursos();
         })
         Swal.fire(
@@ -95,6 +88,17 @@ export class RecursoListComponent implements OnInit{
 
   }
 
+
+ 
+  openEditModalRecurso(): void {
+    this.selectedRecurso = null;
+  }
+
+  onCloseModal(): void {
+    this.selectedRecurso = null;
+  }
+
+
   search() {
     // CASO 1: No hay término de búsqueda escrito en el input
     if (!this.query || this.query.trim() === '') {
@@ -107,14 +111,7 @@ export class RecursoListComponent implements OnInit{
             this.recursoService.emitFilteredRecursos(resp);
           });
       }
-      // Subcaso B: NO hay categoría, pero SÍ hay un estado seleccionado (Usa el nuevo método seguro)
-      else if (this.selectedEstado) {
-        return this.busquedasService.searchByCollection('recursos', '', this.selectedEstado)
-          .subscribe((resp: any) => {
-            this.recursos = resp.resultados || [];
-            this.recursoService.emitFilteredRecursos(this.recursos);
-          });
-      }
+      
       // Subcaso C: Sin filtros seleccionados
       else {
         this.ngOnInit();
@@ -140,24 +137,11 @@ export class RecursoListComponent implements OnInit{
     }
   }
 
-
-
-
-
-
-  PageSize() {
+   PageSize() {
     this.query = '';
-    this.selectedType = '';
-    this.selectedEstado = '';
     this.ngOnInit();
 
   }
-  openEditModal(): void {
-    this.selectedRecurso = null;
-  }
 
-  onCloseModal(): void {
-    this.selectedRecurso = null;
-  }
 
 }
