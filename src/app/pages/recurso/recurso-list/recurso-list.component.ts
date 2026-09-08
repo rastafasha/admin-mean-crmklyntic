@@ -32,27 +32,34 @@ export class RecursoListComponent implements OnInit{
   usuario_id: any;
 
   constructor(
-    private recursoService: RecursoService,
-    private busquedasService: BusquedasService,
-
-  ) {
-    let USER = localStorage.getItem('usuario');
-    this.usuario = JSON.parse(USER ? USER : '');
+  private recursoService: RecursoService,
+  private busquedasService: BusquedasService,
+) {
+  let USER = localStorage.getItem('usuario');
+  
+  try {
+    // Si USER existe y no es una cadena vacía o "undefined", lo parsea. 
+    // De lo contrario, asigna un objeto vacío seguro {}.
+    this.usuario = USER && USER !== 'undefined' ? JSON.parse(USER) : {};
+  } catch (error) {
+    console.error("Error al parsear el usuario del localStorage:", error);
+    this.usuario = {}; // Fallback seguro para evitar que la aplicación explote
   }
+}
 
 
 
   ngOnInit(): void {
-    this.getRecursos();
+    this.getRecursosList();
   }
 
-  getRecursos() {
-    this.loading = true;
-    this.recursoService.getRecursos().subscribe((resp: any) => {
-      this.recursos = resp;
-      this.loading = false;
-    })
-  }
+  getRecursosList() {
+  this.loading = true;
+  this.recursoService.getRecursos().subscribe((resp: any) => {
+    this.recursos = resp; // Recibe el array mapeado de forma segura
+    this.loading = false;
+  });
+}
 
 
 
@@ -75,7 +82,7 @@ export class RecursoListComponent implements OnInit{
     }).then((result) => {
       if (result.isConfirmed) {
         this.recursoService.deleteRecurso(recurso._id).subscribe((resp: any) => {
-          this.getRecursos();
+          this.getRecursosList();
         })
         Swal.fire(
           'Borrado!',
@@ -88,8 +95,6 @@ export class RecursoListComponent implements OnInit{
 
   }
 
-
- 
   openEditModalRecurso(): void {
     this.selectedRecurso = null;
   }

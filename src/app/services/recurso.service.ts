@@ -32,13 +32,17 @@ export class RecursoService {
   }
 
 
-  getRecursos() {
-    const url = `${baseUrl}/recursos`;
-    return this.http.get<any>(url, this.headers)
-      .pipe(
-        map((resp: { ok: boolean, recursos: Recurso }) => resp.recursos)
-      )
-  }
+ getRecursos() {
+  const url = `${baseUrl}/recursos`;
+  return this.http.get<any>(url, this.headers)
+    .pipe(
+      // 1. Corregimos el tipado indicando que 'recursos' es un arreglo (Recurso[])
+      map((resp: { ok: boolean, recursos: Recurso[] }) => {
+        // 2. Protegemos el retorno devolviendo un array vacío seguro en caso de que venga null/undefined
+        return resp && resp.recursos ? resp.recursos : [];
+      })
+    );
+}
 
 
   getRecurso(_id: string) {
