@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Recurso } from 'src/app/models/recurso';
 import { User } from 'src/app/models/user';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './recurso-list.component.html',
   styleUrl: './recurso-list.component.css'
 })
-export class RecursoListComponent {
+export class RecursoListComponent implements OnInit{
 
   @Input() displaycomponent: string = 'block';
   @Input() limit!: number;
@@ -28,7 +28,7 @@ export class RecursoListComponent {
   p: number = 1;
   count: number = 6;
   loading: boolean = false;
-  selectedProject: Recurso;
+  selectedRecurso: Recurso;
   usuario: any;
   usuario_id: any;
 
@@ -64,12 +64,12 @@ export class RecursoListComponent {
 
 
 
-  onEditProject(project: Recurso) {
-    this.selectedProject = project;
+  onEditRecurso(project: Recurso) {
+    this.selectedRecurso = project;
   }
 
   onDeleteProject(project: Recurso) {
-    this.selectedProject = project;
+    this.selectedRecurso = project;
 
     Swal.fire({
       title: 'Estas Seguro?',
@@ -153,11 +153,11 @@ export class RecursoListComponent {
 
   }
   openEditModal(): void {
-    this.selectedProject = null;
+    this.selectedRecurso = null;
   }
 
   onCloseModal(): void {
-    this.selectedProject = null;
+    this.selectedRecurso = null;
   }
 
 }

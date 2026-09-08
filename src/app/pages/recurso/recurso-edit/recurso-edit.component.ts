@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Recurso } from 'src/app/models/recurso';
 import { User } from 'src/app/models/user';
@@ -15,10 +15,10 @@ declare var bootstrap: any;
   templateUrl: './recurso-edit.component.html',
   styleUrl: './recurso-edit.component.css'
 })
-export class RecursoEditComponent {
+export class RecursoEditComponent implements OnInit, OnChanges{
 
-   @Input() projectSeleccionado;
-  @Output() refreshProjectList: EventEmitter<void> = new EventEmitter<void>();
+   @Input() recursoSeleccionado;
+  @Output() refreshRecursoList: EventEmitter<void> = new EventEmitter<void>();
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 
   projectForm: FormGroup;
@@ -46,11 +46,11 @@ export class RecursoEditComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['projectSeleccionado'] &&
-      changes['projectSeleccionado'].currentValue
+      changes['recursoSeleccionado'] &&
+      changes['recursoSeleccionado'].currentValue
     ) {
       this.title = 'Editando Recurso';
-      const project = changes['projectSeleccionado'].currentValue;
+      const project = changes['recursoSeleccionado'].currentValue;
       
       this.projectForm.patchValue({
         id: project._id,
@@ -63,7 +63,7 @@ export class RecursoEditComponent {
         categoria: project.categoria,
         
       });
-      this.projectSeleccionado = project;
+      this.recursoSeleccionado = project;
       this.title = 'Editando Recurso';
     } else {
       this.title = 'Editando Recurso';
@@ -90,7 +90,7 @@ export class RecursoEditComponent {
 
 
   onClose() {
-    this.projectSeleccionado = null;
+    this.recursoSeleccionado = null;
     this.currentStep = 1;
     this.projectForm.reset();
     this.title = 'Creando Recurso';
@@ -105,7 +105,7 @@ export class RecursoEditComponent {
       categoria: null,
       youtubeurl: null,
     });
-    // Emit event to parent to reset the projectSeleccionado variable
+    // Emit event to parent to reset the recursoSeleccionado variable
     
 
      // Close modal programmatically
@@ -116,7 +116,7 @@ export class RecursoEditComponent {
 
         }
         // Emit event to refresh project list
-        this.refreshProjectList.emit();
+        this.refreshRecursoList.emit();
         this.closeModal.emit();
         this.ngOnInit()
   }
@@ -137,11 +137,11 @@ export class RecursoEditComponent {
       ...this.projectForm.value,
     };
 
-    if (this.projectSeleccionado) {
+    if (this.recursoSeleccionado) {
       //actualizar
       const data = {
         ...dataToSend,
-        _id: this.projectSeleccionado._id,
+        _id: this.recursoSeleccionado._id,
       };
       this.recursoService.updateRecurso(data).subscribe((resp) => {
         this.isLoading = false;
@@ -159,14 +159,14 @@ export class RecursoEditComponent {
 
         }
         // Emit event to refresh project list
-        this.refreshProjectList.emit();
+        this.refreshRecursoList.emit();
         this.ngOnInit()
       });
     } else {
       //crear
       this.recursoService.createRecurso(dataToSend).subscribe((resp: any) => {
         this.isLoading = false;
-        this.projectSeleccionado = resp;
+        this.recursoSeleccionado = resp;
         Swal.fire('¡Creado!', 'Recurso creada.', 'success');
          // Close modal programmatically
         const modalElement = document.getElementById('editRecurso');
@@ -176,7 +176,7 @@ export class RecursoEditComponent {
 
         }
         // Emit event to refresh project list
-        this.refreshProjectList.emit();
+        this.refreshRecursoList.emit();
         this.ngOnInit()
       });
     }

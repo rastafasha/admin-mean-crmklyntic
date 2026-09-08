@@ -9,38 +9,38 @@ import { Recurso } from 'src/app/models/recurso';
 })
 export class RecursoItemComponent {
 
-   @Input() project: Recurso;
+   @Input() recurso: Recurso;
   @Input() showAdminControls: boolean = false;
 
   @Output() onTogglePresentation = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<string>();
   @Output() onDelete = new EventEmitter<Recurso>();
-  @Output() onEditProject = new EventEmitter<Recurso>();
-  @Output() selectedProject: Recurso;
+  @Output() onEditRecurso = new EventEmitter<Recurso>();
+  @Output() selectedRecurso: Recurso;
 
  
   ngOnInit(): void {
   }
 
   togglePresentation() {
-    this.onTogglePresentation.emit(this.project._id);
+    this.onTogglePresentation.emit(this.recurso._id);
   }
 
   editProject() {
-    this.onEdit.emit(this.project._id);
+    this.onEdit.emit(this.recurso._id);
   }
 
-  deleteProject() {
-    this.onDelete.emit(this.project);
+  deleteRecurso() {
+    this.onDelete.emit(this.recurso);
 
   }
 
-  openEditModal(project: Recurso): void {
-    this.onEditProject.emit(project);
+  openEditModal(recurso: Recurso): void {
+    this.onEditRecurso.emit(recurso);
   }
 
-  openPaymentsModal(project: Recurso): void {
-    this.selectedProject = project;
+  openPaymentsModal(recurso: Recurso): void {
+    this.selectedRecurso = recurso;
     // console.log(project);
   }
 

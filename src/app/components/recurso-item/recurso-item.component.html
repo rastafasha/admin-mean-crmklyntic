@@ -1,10 +1,10 @@
  <div class="card shadow-sm rounded">
     <div class="card-body">
-      <div class="topeproject">
-        <!-- <img [src]="(project?.img||'') | imagenPipe:'doctors'" alt=""> -->
+      <div class="toperecurso">
+        <!-- <img [src]="(recurso?.img||'') | imagenPipe:'doctors'" alt=""> -->
         <div class="datos ">
-          <h5 class="card-title fw-bold text-dark m-0 p-0">{{ project.titulo }}</h5>
-          <span class="badge bg-primary text-white small ">{{ project.categoria }}</span>
+          <h5 class="card-title fw-bold text-dark m-0 p-0">{{ recurso.titulo }}</h5>
+          <span class="badge bg-primary text-white small ">{{ recurso.categoria }}</span>
         </div>
 
       </div>
@@ -21,8 +21,8 @@
                   d="M8 3.5a.5.5 0 01.5.5v3.25l2.5 1.5a.5.5 0 11-.5.866l-2.75-1.65A.5.5 0 017.5 7V4a.5.5 0 01.5-.5z" />
                 <path d="M8 16A8 8 0 108 0a8 8 0 000 16zM8 1a7 7 0 110 14A7 7 0 018 1z" />
               </svg>
-              <span class="text-secondary" *ngIf="project.fechaCreacion">
-                Fecha Creado: {{ project.fechaCreacion }}
+              <span class="text-secondary" *ngIf="recurso.fechaCreacion">
+                Fecha Creado: {{ recurso.fechaCreacion }}
               </span>
             </div>
 
@@ -30,13 +30,13 @@
             <div class="d-flex align-items-center">
               <i class="fa fa-map-pin"></i>&nbsp; &nbsp;
               <span class="text-secondary">
-                Activo?: {{ project.activo === true ? 'Si' : 'No' }}
+                Activo?: {{ recurso.activo === true ? 'Si' : 'No' }}
               </span>
             </div>
             <div class="d-flex align-items-center" >
               <i class="fa fa-map-pin"></i>&nbsp; &nbsp;
               <span class="text-secondary">
-                tipo: {{ project.tipo }}
+                tipo: {{ recurso.tipo }}
               </span>
             </div>
           </div>
@@ -45,13 +45,13 @@
 
       <div class="mt-4 d-flex justify-content-between align-items-center">
         <button (click)="togglePresentation()" [ngClass]="{
-          'btn btn-success': project.activo === true,
-          'btn btn-danger': project.activo !== true
+          'btn btn-success': recurso.activo === true,
+          'btn btn-danger': recurso.activo !== true
         }">
-          {{ project.activo === true ? 'Aprobado' : 'Inactivo' }}
+          {{ recurso.activo === true ? 'Aprobado' : 'Inactivo' }}
         </button>
         <div class="d-flex gap-1">
-          <button href="javascript:void(0)" (click)="openEditModal(project)" data-bs-toggle="modal"
+          <button href="javascript:void(0)" (click)="openEditModal(recurso)" data-bs-toggle="modal"
             data-bs-target="#editRecurso" class="btn btn-outline-primary p-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil"
               viewBox="0 0 16 16">
@@ -60,7 +60,7 @@
             </svg>
           </button>
 
-          <button (click)="deleteProject()" class="btn btn-outline-danger p-2">
+          <button (click)="deleteRecurso()" class="btn btn-outline-danger p-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path

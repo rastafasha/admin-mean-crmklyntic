@@ -20,6 +20,7 @@ import { PaymentDetailsComponent } from './payment/payment-details/payment-detai
 import { ReportarPagoComponent } from './payment/reportar-pago/reportar-pago.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { RecursoListComponent } from './recurso/recurso-list/recurso-list.component';
+import { RecursoEditComponent } from './recurso/recurso-edit/recurso-edit.component';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -55,6 +56,11 @@ const childRoutes: Routes = [
     { path: 'project/crear', component: ProjectEditComponent, data:{title:'Crear Proyecto'} },
     { path: 'project/edit/:id', component: ProjectEditComponent, data:{title:'Editar Proyecto'} },
     
+    { path: 'recursos', component: RecursoListComponent, data:{title:'Recursos'} },
+    { path: 'recursos/:id', component: RecursoListComponent, data:{title:'Recursos'} },
+    { path: 'recursos/crear', component: RecursoEditComponent, data:{title:'Crear Recurso'} },
+    { path: 'recursos/edit/:id', component: RecursoEditComponent, data:{title:'Editar Recurso'} },
+
     { path: 'clientes', component: ClientesListComponent, data:{title:'Cliente'} },
     { path: 'clientes/:id', component: ClientesListComponent, data:{title:'Cliente'} },
     { path: 'cliente/crear', component: ClienteEditComponent, data:{title:'Crear Cliente'} },
@@ -66,8 +72,8 @@ const childRoutes: Routes = [
     { path: 'payment/edit/:id', component: ReportarPagoComponent, data:{title:'Editar Pago'} },
     { path: 'payment-detail/:id', component: PaymentDetailsComponent, data:{title:'Revisar Pago'} },
 
-  { path: 'recursos', component: RecursoListComponent, data:{title:'Recursos'} },
-    
+
+  
     //user
     { path: 'users', component: UsersComponent, data:{title:'Usuarios'} },
     { path: 'user/:id', component: UserProfileComponent, data:{title:'Detalle Usuario'} },
