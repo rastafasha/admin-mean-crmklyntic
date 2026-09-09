@@ -31,6 +31,7 @@ import { ProjectModule } from './project/project.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { PaymentsModule } from './payment/payments.module';
 import { RecursoModule } from './recurso/recurso.module';
+import { ProspectoModule } from './prospecto/prospecto.module';
 
 @NgModule({ 
     declarations: [
@@ -67,7 +68,8 @@ import { RecursoModule } from './recurso/recurso.module';
         ProjectModule,
         ClienteModule,
         PaymentsModule,
-        RecursoModule
+        RecursoModule,
+        ProspectoModule
     ], 
         providers: [
         provideHttpClient(withInterceptorsFromDi())

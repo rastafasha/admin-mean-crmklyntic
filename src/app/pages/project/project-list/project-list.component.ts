@@ -129,40 +129,47 @@ search() {
 
     // Subcaso A: Seleccionó una categoría (con o sin estado)
     if (this.selectedType) {
+      this.loading = true;
       return this.projectService.getProjectsByCategory(this.selectedType, this.selectedEstado)
         .subscribe((resp: any) => {
           this.doctors = resp;
           this.projectService.emitFilteredDoctors(resp);
+          this.loading = false;
         });
     }
     
     // NUEVO Subcaso B: Seleccionó Tipo de Clínica Y Estado al mismo tiempo
     // (Asegúrate de que tu servicio 'searchByCollection' acepte un 4to parámetro para tipoClinica)
     else if (this.selectedEstado && this.selectedtipoClinica) {
+      this.loading = true;
       return this.busquedasService.searchByCollection('doctors', '', this.selectedEstado, this.selectedtipoClinica)
         .subscribe((resp: any) => {
           this.doctors = resp.resultados || [];
           this.projectService.emitFilteredDoctors(this.doctors);
+          this.loading = false;
         });
     }
 
     // Subcaso C: SÓLO hay tipo de clínica
     else if (this.selectedtipoClinica) {
       // OJO: Si el 3er parámetro es el estado, envía null/vacío antes de la clínica
+      this.loading = true;
       return this.busquedasService.searchByCollection('doctors', '', null, this.selectedtipoClinica)
         .subscribe((resp: any) => {
           this.doctors = resp.resultados || [];
-          console.log(resp);
           this.projectService.emitFilteredDoctors(this.doctors);
+          this.loading = false;
         });
     }
 
     // Subcaso D: SÓLO hay un estado seleccionado
     else if (this.selectedEstado) {
+      this.loading = true;
       return this.busquedasService.searchByCollection('doctors', '', this.selectedEstado)
         .subscribe((resp: any) => {
           this.doctors = resp.resultados || [];
           this.projectService.emitFilteredDoctors(this.doctors);
+          this.loading = false;
         });
     }
     

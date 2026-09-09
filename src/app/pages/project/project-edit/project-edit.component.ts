@@ -90,7 +90,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         id: project._id,
         name: project.name,
         slug: project.slug,
-        num_whatsapp: project.num_whatsapp,
+        phone: project.phone,
         url: project.url,
         rrss: project.rrss,
         speciality: project.speciality._id,
@@ -110,6 +110,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         email_contacto: project.email_contacto,
         canal_origen: project.canal_origen,
         correo_enviado: project.correo_enviado,
+        correo_sendit: project.correo_sendit,
       });
       this.projectSeleccionado = project;
       this.title = 'Editando Proyecto';
@@ -153,7 +154,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       name: ['', Validators.required],
       url: [''],
       slug: [''],
-      num_whatsapp: [''],
+      phone: [''],
       rrss: ['', Validators.required],
       speciality: ['', Validators.required],
       tipoClinica: ['', Validators.required],
@@ -168,6 +169,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       email_contacto: [''],
       canal_origen: [''],
       correo_enviado: [''],
+      correo_sendit: [false],
       status: [false],
       hasVisited: [false],
       notificado: [false],
@@ -189,7 +191,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       name: null,
       url: null,
       slug: null,
-      num_whatsapp: null,
+      phone: null,
       rrss: null,
       category: null,
       tipoClinica: null,
@@ -200,6 +202,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       negociacion: null,
       propuesta: null,
       status: [false],
+      correo_sendit: [false],
       hasVisited: [false],
       notificado: [false],
       partners: null,
@@ -228,7 +231,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
   nextStep() {
     const name = this.projectForm.get('name');
     const url = this.projectForm.get('url');
-    const num_whatsapp = this.projectForm.get('num_whatsapp');
+    const phone = this.projectForm.get('phone');
     const category = this.projectForm.get('category');
     const pais = this.projectForm.get('pais');
     const rrss = this.projectForm.get('rrss');
@@ -239,7 +242,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     const hasVisited = this.projectForm.get('hasVisited');
 
     if (name?.invalid || url?.invalid ||
-      num_whatsapp?.invalid || category?.invalid ||
+      phone?.invalid || category?.invalid ||
        pais?.invalid ||
       rrss?.invalid || ubicacion?.invalid ||
       tipoClinica?.invalid ||
@@ -250,7 +253,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     ) {
       name?.markAsTouched();
       url?.markAsTouched();
-      num_whatsapp?.markAsTouched();
+      phone?.markAsTouched();
       category?.markAsTouched();
       pais?.markAsTouched();
       rrss?.markAsTouched();

@@ -77,8 +77,7 @@
 
                 <div class="card recent-sales overflow-auto " *ngIf="!loading">
                     <div class="card-body">
-                        <pagination-controls (pageChange)="p = $event"
-                            [style.display]="displaycomponent"></pagination-controls>
+                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
 
                         <div class="contenido ">
                             <div class="item "
@@ -90,8 +89,7 @@
                                 (refreshProjectList)="getProjects()" (closeModal)="onCloseModal()"></app-project-edit>
                         </div>
 
-                        <pagination-controls (pageChange)="p = $event"
-                            [style.display]="displaycomponent"></pagination-controls>
+                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
 
                     </div>
 

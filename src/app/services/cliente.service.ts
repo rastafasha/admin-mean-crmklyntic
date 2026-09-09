@@ -41,7 +41,7 @@ export class ClienteService {
     }
   
     getClientesByCategory(categoryName: string) {
-      const url = `${baseUrl}/clientes/category/${categoryName}`;
+      const url = `${baseUrl}/clientes/speciality/${categoryName}`;
       return this.http.get<any>(url, this.headers)
         .pipe(
           map((resp: { ok: boolean, clientes: Cliente[] }) => resp.clientes)

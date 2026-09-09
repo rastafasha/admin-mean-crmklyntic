@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="col-xs-12 col-md-4 mb-2">
                                     <label>Num Whatsapp</label>
-                                    <input type="text" formControlName="num_whatsapp" class="form-control">
+                                    <input type="text" formControlName="phone" class="form-control">
 
                                 </div>
                                 <div class="col-xs-12 col-md-4 mb-2">
@@ -248,7 +248,7 @@
                             </div>
                             <div class="clear"></div>
                             <div class="row mb-3">
-                                <div class="col-xs-12 col-md-6">
+                                <div class="col-xs-12 col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input" formControlName="notificado" type="checkbox"
                                             id="flexChecknotificado">
@@ -257,7 +257,16 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-md-6">
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" formControlName="correo_sendit" type="checkbox"
+                                            id="flexCheckstatus">
+                                        <label class="form-check-label" for="flexCheckstatus">
+                                            ¿Correo Enviado por sistema?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input" formControlName="status" type="checkbox"
                                             id="flexCheckstatus">
@@ -279,6 +288,7 @@
                                     <select class="form-control selecttyp" formControlName="canal_origen">
                                         <option value="">Seleccione</option>
                                         <option value="Instagram (DM)">Instagram (DM)</option>
+                                        <option value="En Persona">En Persona</option>
                                         <option value="WhatsApp Directo">WhatsApp Directo</option>
                                         <option value="En Persona">En Persona</option>
                                     </select>
@@ -292,6 +302,7 @@
                                         <option value="INTERESADO_ESPERA_DATOS">Intesado Espera Datos</option>
                                         <option value="CORREO_ENVIADO">Correo Enviado</option>
                                         <option value="RECHAZADO">Rechazado</option>
+                                        <option value="APROBADO">Aprobado</option>
                                     </select>
                                 </div>
                                 <div class="col-xs-12 col-md-3">
@@ -300,9 +311,11 @@
                                         <option value="">Seleccione</option>
                                         <option value="PENDIENTE">Pendiente</option>
                                         <option value="TEST">Test</option>
+                                        <option value="COLABORADOR">Colaborador</option>
                                         <option value="SUSCRITO">Suscrito</option>
                                     </select>
                                 </div>
+                                
                             </div>
                             <div class="clear"></div>
                             <div class="row mb-3">

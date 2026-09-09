@@ -1,0 +1,216 @@
+<div class="container-fluid py-4" style="font-family: 'Helvetica Neue', Arial, sans-serif;">
+
+  <!-- Encabezado del Módulo -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+      <h2 class="text-dark font-weight-bold m-0">🎙️ Campaña de Prospección Klyntic</h2>
+      <p class="text-muted m-0">Gestión de contactos recolectados a pie y automatización de Mailjet</p>
+    </div>
+    <div class="col-md-6 text-md-right mt-3 mt-md-0">
+      <button class="btn btn-primary btn-lg shadow-sm border-0"
+        style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);" (click)="ejecutarMasiveCampaing()"
+        [disabled]="cargando">
+        🚀 Disparar Lote Diario (Max 200)
+      </button>
+    </div>
+  </div>
+
+  <!-- 🎛️ TU BARRA DE FILTROS PERSONALIZADA (ESTILO PÍLDORA) -->
+  <form class="form-horizontal">
+    <div
+      class="p-2 bg-white rounded rounded-pill shadow-sm mb-4 d-flex justify-content-center align-items-center gap-3 border">
+      <div class="input-group align-items-center px-3">
+
+        <!-- Input de búsqueda por texto -->
+        <input type="search" name="search" class="form-control border-0 bg-transparent"
+          placeholder="Buscar Doctor o Instagram..." [(ngModel)]="query" (input)="search()" />
+
+        <!-- Select Especialidades -->
+        <select class="form-control border-0 bg-transparent ml-2 text-muted" [(ngModel)]="selectedType" name="type"
+          (change)="search()" style="max-width: 200px; border-left: 2px solid #e2e8f0 !important; border-radius: 0;">
+          <option value="">Seleccione Categoría</option>
+          <option *ngFor="let data of specialities" [value]="data.name || data.nombre">
+            {{ data.name || data.nombre }}
+          </option>
+        </select>
+
+        <!-- Select Tipo de Clínica -->
+        <select class="form-control border-0 bg-transparent ml-2 text-muted" [(ngModel)]="selectedtipoClinica"
+          name="tipoClinica" (change)="search()"
+          style="max-width: 180px; border-left: 2px solid #e2e8f0 !important; border-radius: 0;">
+          <option value="">Seleccione Tipo</option>
+          <option value="Consultorio">Consultorio</option>
+          <option value="Clinica">Clínica</option>
+        </select>
+
+        <!-- Select Estado Pipeline -->
+        <select class="form-control border-0 bg-transparent ml-2 text-muted" [(ngModel)]="selectedEstado"
+          name="estado_seguimiento" (change)="search()"
+          style="max-width: 200px; border-left: 2px solid #e2e8f0 !important; border-radius: 0;">
+          <option value="">Seleccione Estado</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="INTERESADO_ESPERA_DATOS">Interesado Espera Datos</option>
+          <option value="CORREO_ENVIADO">Correo Enviado</option>
+          <option value="RECHAZADO">Rechazado</option>
+          <option value="APROBADO">Aprobado</option>
+        </select>
+
+        <!-- Botones de Acción de la barra -->
+        <div class="input-group-append ml-3">
+          <button type="button" class="btn btn-link text-primary p-1" (click)="search()">
+            <i class="fa fa-search" style="font-size: 18px;"></i>
+          </button>
+          <button type="button" (click)="PageSize()" class="btn btn-light rounded-circle ml-2 p-2 shadow-sm border">
+            <i class="fa fa-refresh text-secondary"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+  <!-- Barra de Filtros Rápidos (Selects) -->
+  <div class="card shadow-sm border-0 mb-4 rounded-xl">
+    <div class="card-body bg-light rounded-xl">
+      <div class="row align-items-center">
+
+
+
+        <!-- Métricas Rápidas -->
+        <div class="col-md-4 text-md-right mt-3 mt-md-0">
+          <span class="badge badge-info p-2 text-uppercase">Mostrados: {{doctors.length}}</span>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado de Carga (Spinner) -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+    <p class="text-muted mt-2">Sincronizando con el CRM independiente de MongoDB...</p>
+  </div>
+
+  <!-- Tabla Principal de Gestión -->
+  <div *ngIf="!cargando" class="card shadow-sm border-0 rounded-xl overflow-hidden">
+    <pagination-controls (pageChange)="p = $event; cambiarPagina(($event - 1) * limite)"
+      [style.display]="displaycomponent">
+    </pagination-controls>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle m-0">
+        <thead class="bg-dark text-white text-uppercase small">
+          <tr>
+            <th class="py-3 pl-4 text-center" style="width: 50px;">
+              <input type="checkbox" class="form-check-input position-static m-0 shadow-sm"
+                [(ngModel)]="seleccionarTodosMasteer" (change)="toggleSeleccionarTodos()">
+            </th>
+            <th class="py-3 pl-4">Especialista</th>
+            <th class="py-3">Establecimiento</th>
+            <th class="py-3">Especialidad</th>
+            <th class="py-3">Canal / Contacto</th>
+            <th class="py-3">Estado Correo</th>
+            <th class="py-3 pr-4 text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Fila Vacía (No hay registros con los filtros) -->
+          <tr *ngIf="doctors.length === 0">
+            <td colspan="6" class="text-center py-5 text-muted">
+              ⚠️ No se encontraron médicos con los filtros seleccionados en este momento.
+            </td>
+          </tr>
+
+          <!-- Iteración de Médicos del Directorio -->
+          <tr
+            *ngFor="let doctor of doctors | paginate: { itemsPerPage: limite, currentPage: p, totalItems: totalRegistros }">
+            <td class="text-center pl-4 align-middle" style="width: 50px;">
+
+              <!-- 👁️ SI TIENE CORREO Y NO SE LE HA ENVIADO: Muestra el Checkbox listo para marcar -->
+              <input *ngIf="doctor.email_contacto && doctor.email_contacto.trim() !== '' && !doctor.correo_enviado" type="checkbox"
+                class="form-check-input" style="cursor: pointer; transform: scale(1.2);"
+                [(ngModel)]="doctor.seleccionado">
+
+              <!-- ✅ SI YA SE LE ENVIÓ: Mostramos un pequeño check verde estático en lugar de la casilla -->
+              <i *ngIf="doctor.correo_enviado" class="fa fa-check-circle text-success" style="font-size: 18px;"
+                title="Ya enviado"></i>
+
+              <!-- 🚫 SI NO TIENE CORREO (Solo Instagram): Dejamos un icono de alerta sutil o vacío -->
+              <i *ngIf="!doctor.email_contacto || doctor.email_contacto.trim() === ''" class="fa fa-minus text-muted"
+                style="opacity: 0.5;" title="Sin correo electrónico"></i>
+
+            </td>
+            <!-- Nombre y Teléfono -->
+            <td class="py-3 ">
+              <div class="d-flex align-items-center">
+                <img [src]="doctor.imagenUrl" class="rounded-circle mr-3 border"
+                  style="width: 45px; height: 45px; object-fit: cover;">
+                <div>
+                  <h6 class="m-0 font-weight-bold text-dark">
+                    Dr(a). {{doctor.nombre || ''}} {{doctor.apellido || doctor.name || 'Especialista'}}
+                  </h6>
+                  <small class="text-muted">{{doctor.phone || 'Sin Teléfono'}}</small>
+                </div>
+              </div>
+            </td>
+
+            <!-- Tipo y Ubicación -->
+            <td>
+              <span class="badge badge-light border text-dark px-2 py-1 font-weight-bold">
+                {{doctor.tipoClinica || 'Consultorio'}}
+              </span>
+              <small class="text-muted d-block mt-1">📍 {{doctor.ubicacion || 'Caracas'}}</small>
+            </td>
+
+            <!-- Especialidad Dinámica -->
+            <td>
+              <span class="text-secondary font-weight-medium">
+                {{ (doctor.speciality && doctor.speciality?.nombre ) ? doctor.speciality?.nombre : (doctor.speciality ||
+                'General') }}
+              </span>
+            </td>
+
+            <!-- Email e Instagram -->
+            <td>
+              <div *ngIf="doctor.email_contacto" class="text-dark small font-weight-medium mb-1">✉️ {{doctor.email_contacto}}</div>
+              <div *ngIf="doctor.rrss" class="text-primary small font-weight-bold">
+                <!-- 📸 <a href="https://instagram.com/{{doctor.name || 'klyntic'}}" target="_blank">@{{doctor.name || 'Instagram'}}</a> -->
+              </div>
+            </td>
+
+            <!-- Estado de Seguimiento -->
+            <td>
+              <span *ngIf="doctor.estado_seguimiento === 'CORREO_ENVIADO'"
+                class="badge badge-success px-2 py-1 text-uppercase">
+                ✅ Enviado
+              </span>
+              <span *ngIf="doctor.estado_seguimiento === 'PENDIENTE' && doctor.email_contacto"
+                class="badge badge-warning px-2 py-1 text-uppercase">
+                ⏳ Pendiente
+              </span>
+              <span *ngIf="!doctor.email_contacto" class="badge badge-secondary px-2 py-1 text-uppercase">
+                🚫 Solo Redes
+              </span>
+            </td>
+
+            <!-- Envío de Correo Individual -->
+            <td class="text-center pr-4">
+              <button class="btn btn-sm btn-outline-primary px-3 rounded-pill"
+                [disabled]="doctor.correo_sendit || !doctor.email_contacto" (click)="enviarCorreoUnico(doctor)">
+                {{ doctor.correo_sendit ? 'Enviado ✔️' : 'Enviar Correo ✉️' }}
+              </button>
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls (pageChange)="p = $event; cambiarPagina(($event - 1) * limite)"
+      [style.display]="displaycomponent">
+    </pagination-controls>
+
+  </div>
+
+</div>

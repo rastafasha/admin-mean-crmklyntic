@@ -21,6 +21,7 @@ import { ReportarPagoComponent } from './payment/reportar-pago/reportar-pago.com
 import { AuthGuard } from '../guards/auth.guard';
 import { RecursoListComponent } from './recurso/recurso-list/recurso-list.component';
 import { RecursoEditComponent } from './recurso/recurso-edit/recurso-edit.component';
+import { ProspectoPanelComponent } from './prospecto/prospecto-panel/prospecto-panel.component';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -60,6 +61,8 @@ const childRoutes: Routes = [
     { path: 'resources/:id', component: RecursoListComponent, data:{title:'Recursos'} },
     { path: 'resources/crear', component: RecursoEditComponent, data:{title:'Crear Recurso'} },
     { path: 'resources/edit/:id', component: RecursoEditComponent, data:{title:'Editar Recurso'} },
+    
+    { path: 'prospecto', component: ProspectoPanelComponent, data:{title:'Prospecto'} },
 
     { path: 'clientes', component: ClientesListComponent, data:{title:'Cliente'} },
     { path: 'clientes/:id', component: ClientesListComponent, data:{title:'Cliente'} },
