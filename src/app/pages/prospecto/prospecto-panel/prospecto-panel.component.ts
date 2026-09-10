@@ -243,21 +243,30 @@ search() {
   }
 
   // CASO 2: Sí hay un término de búsqueda en el input de texto
-  else {
-    return this.busquedasService.searchGlobal(this.query, this.selectedEstado, this.selectedtipoClinica)
-      .subscribe((resp: any) => {
-        let filteredProjects = resp.projects || [];
+   else {
+      this.cargando = true; // Buena práctica activar el loading aquí también
 
-        if (this.selectedType) {
-          filteredProjects = filteredProjects.filter(
-            (project: any) => project.category?.nombre === this.selectedType
-          );
-        }
+      // CORRECCIÓN: Pasamos this.query, luego el estado (si existe) y por último el tipo de clínica
+      return this.busquedasService.searchGlobal(this.query, this.selectedEstado, this.selectedtipoClinica)
+        .subscribe((resp: any) => {
+          // Ajusta 'resp.resultados' o 'resp.projects' según lo que devuelva tu backend en searchGlobal
+          let filteredProjects = resp.resultados || resp.doctors || [];
 
-        this.doctors = filteredProjects;
-        this.projectService.emitFilteredDoctors(filteredProjects);
-      });
-  }
+          // Si además tenías el filtro de categoría (selectedType) en el frontend:
+          if (this.selectedType) {
+            filteredProjects = filteredProjects.filter(
+              (project: any) => project.category?.nombre === this.selectedType
+            );
+          }
+
+          this.doctors = filteredProjects;
+          this.projectService.emitFilteredDoctors(filteredProjects);
+          this.cargando = false;
+        }, (error) => {
+          this.cargando = false;
+          console.error(error);
+        });
+    }
 }
 
   /**

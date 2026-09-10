@@ -107,16 +107,23 @@ export class CategoryIndexComponent implements OnInit {
   }
 
   search() {
-    if (!this.query) {
-      this.ngOnInit();
-    } else {
-      return this.busquedasService.searchGlobal(this.query).subscribe(
-        (resp: any) => {
-          this.categorias = resp.categorias;
+  // Si limpia el buscador o está vacío, recarga la lista inicial
+  if (!this.query || this.query.trim() === '') {
+    this.ngOnInit();
+    return;
+  } 
 
-        }
-      )
+  // Llama correctamente a .buscar() pasándole el tipo exacto
+  return this.busquedasService.buscar('specialities', this.query).subscribe(
+    (resp: any) => {
+      // Como tu servicio ya extrae 'resp.resultados', aquí 'resp' ya es el arreglo directo
+      this.categorias = resp; 
+    },
+    (error) => {
+      console.error('Error buscando especialidades:', error);
     }
-  }
+  );
+}
+
 
 }

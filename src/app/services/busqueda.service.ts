@@ -58,7 +58,7 @@ export class BusquedasService {
   }
   
 
-  buscar(tipo: 'usuarios' |  'doctors'| 'specialities'| 'recursos', termino: string) {
+  buscar(tipo: 'usuarios' |  'doctors'| 'specialities' | 'recursos', termino: string) {
     const url = `${base_url}/todo/coleccion/${tipo}/${termino}`;
     return this.http.get<any[]>(url, this.headers).pipe(
       map((resp: any) => {
