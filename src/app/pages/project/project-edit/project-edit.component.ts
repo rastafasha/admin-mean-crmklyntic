@@ -89,6 +89,8 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       this.projectForm.patchValue({
         id: project._id,
         name: project.name,
+        nombre: project.nombre,
+        apellido: project.apellido,
         slug: project.slug,
         phone: project.phone,
         url: project.url,
@@ -152,10 +154,12 @@ export class ProjectEditComponent implements OnInit, OnChanges {
   validarFormulario() {
     this.projectForm = this.fb.group({
       name: ['', Validators.required],
+      nombre: [''],
+      apellido: [''],
       url: [''],
       slug: [''],
       phone: [''],
-      rrss: ['', Validators.required],
+      rrss: [''],
       speciality: ['', Validators.required],
       tipoClinica: ['', Validators.required],
       ubicacion: ['', Validators.required],
@@ -189,6 +193,8 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     // Also reset default values if needed
     this.projectForm.patchValue({
       name: null,
+      nombre: null,
+      apellido: null,
       url: null,
       slug: null,
       phone: null,
@@ -234,7 +240,6 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     const phone = this.projectForm.get('phone');
     const category = this.projectForm.get('category');
     const pais = this.projectForm.get('pais');
-    const rrss = this.projectForm.get('rrss');
     const ubicacion = this.projectForm.get('ubicacion');
     const tipoClinica = this.projectForm.get('tipoClinica');
     const dateVisita = this.projectForm.get('dateVisita');
@@ -243,8 +248,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
 
     if (name?.invalid || url?.invalid ||
       phone?.invalid || category?.invalid ||
-       pais?.invalid ||
-      rrss?.invalid || ubicacion?.invalid ||
+       pais?.invalid || ubicacion?.invalid ||
       tipoClinica?.invalid ||
       dateVisita?.invalid ||
       dateAprobado?.invalid ||
@@ -256,7 +260,6 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       phone?.markAsTouched();
       category?.markAsTouched();
       pais?.markAsTouched();
-      rrss?.markAsTouched();
       ubicacion?.markAsTouched();
       tipoClinica?.markAsTouched();
       dateVisita?.markAsTouched();

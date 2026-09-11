@@ -49,10 +49,19 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-4 mb-2">
-                                    <label>Instagram<span class="required">*</span></label>
+                                    <label>Instagram</label>
                                     <input type="text" formControlName="rrss" class="form-control">
-                                    <div *ngIf="projectForm.get('rrss')?.touched && projectForm.get('rrss')?.errors?.['required']"
-                                        class="text-danger">Campo Requerido</div>
+                                    
+
+                                </div>
+                                <div class="col-xs-12 col-md-4 mb-2">
+                                    <label>nombre</label>
+                                    <input type="text" formControlName="nombre" class="form-control">
+
+                                </div>
+                                <div class="col-xs-12 col-md-4 mb-2">
+                                    <label>apellido </label>
+                                    <input type="text" formControlName="apellido" class="form-control">
 
                                 </div>
                                 <div class="col-xs-12 col-md-4 mb-2">
