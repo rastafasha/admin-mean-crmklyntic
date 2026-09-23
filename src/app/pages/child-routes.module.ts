@@ -13,8 +13,6 @@ import { CategoryIndexComponent } from './conf/category/category-index/category-
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { ProjectEditComponent } from './project/project-edit/project-edit.component';
-import { ClientesListComponent } from './cliente/clientes-list/clientes-list.component';
-import { ClienteEditComponent } from './cliente/cliente-edit/cliente-edit.component';
 import { PaymentsComponent } from './payment/payments.component';
 import { PaymentDetailsComponent } from './payment/payment-details/payment-details.component';
 import { ReportarPagoComponent } from './payment/reportar-pago/reportar-pago.component';
@@ -22,6 +20,7 @@ import { AuthGuard } from '../guards/auth.guard';
 import { RecursoListComponent } from './recurso/recurso-list/recurso-list.component';
 import { RecursoEditComponent } from './recurso/recurso-edit/recurso-edit.component';
 import { ProspectoPanelComponent } from './prospecto/prospecto-panel/prospecto-panel.component';
+import { ConsultorioListComponent } from './consultorio/consultorio-list/consultorio-list.component';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -64,10 +63,8 @@ const childRoutes: Routes = [
     
     { path: 'prospecto', component: ProspectoPanelComponent, data:{title:'Prospecto'} },
 
-    { path: 'clientes', component: ClientesListComponent, data:{title:'Cliente'} },
-    { path: 'clientes/:id', component: ClientesListComponent, data:{title:'Cliente'} },
-    { path: 'cliente/crear', component: ClienteEditComponent, data:{title:'Crear Cliente'} },
-    { path: 'cliente/edit/:id', component: ClienteEditComponent, data:{title:'Editar Cliente'} },
+    { path: 'consultorios', component: ConsultorioListComponent, data:{title:'Consultorio'} },
+    { path: 'consultorios/:id', component: ConsultorioListComponent, data:{title:'Consultorio'} },
     
     { path: 'payments', component: PaymentsComponent, data:{title:'Pago'} },
     { path: 'payments/:id', component: PaymentDetailsComponent, data:{title:'Pago'} },

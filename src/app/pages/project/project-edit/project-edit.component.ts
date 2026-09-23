@@ -148,7 +148,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         partnersFormArray.push(new FormControl(isSelected));
       });
     }
-    this.projectForm.setControl('partners', partnersFormArray);
+    // this.projectForm.setControl('partners', partnersFormArray);
   }
 
   validarFormulario() {

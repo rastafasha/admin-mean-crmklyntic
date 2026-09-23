@@ -28,10 +28,10 @@ import { UsersComponent } from './users/users.component';
 
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { ProjectModule } from './project/project.module';
-import { ClienteModule } from './cliente/cliente.module';
 import { PaymentsModule } from './payment/payments.module';
 import { RecursoModule } from './recurso/recurso.module';
 import { ProspectoModule } from './prospecto/prospecto.module';
+import { ConsultorioModule } from './consultorio/consultorio.module';
 
 @NgModule({ 
     declarations: [
@@ -66,10 +66,10 @@ import { ProspectoModule } from './prospecto/prospecto.module';
         ComponentsModule,
         NgxPaginationModule,
         ProjectModule,
-        ClienteModule,
         PaymentsModule,
         RecursoModule,
-        ProspectoModule
+        ProspectoModule,
+        ConsultorioModule
     ], 
         providers: [
         provideHttpClient(withInterceptorsFromDi())

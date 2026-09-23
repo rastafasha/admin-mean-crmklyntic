@@ -8,8 +8,8 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
-import { ClienteService } from 'src/app/services/cliente.service';
-import { Cliente } from 'src/app/models/cliente';
+import { Consultorio } from 'src/app/models/consultorio';
+import { ConsultorioService } from 'src/app/services/consultorio.service';
 
 interface HtmlInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -56,14 +56,14 @@ export class ReportarPagoComponent implements OnInit, OnChanges {
   partners: User[];
 
   public storage = environment.mediaUrlRemoto
-  clientes: Cliente;
+  clientes: Consultorio;
 
 
   constructor(
     private fb: FormBuilder,
     private paymentService: PaymentService,
     private usuarioService: UserService,
-    private clienteService: ClienteService,
+    private clienteService: ConsultorioService,
   ) {
     this.usuario = usuarioService.usuario;
     const base_url = environment.apiUrl;
@@ -87,7 +87,7 @@ export class ReportarPagoComponent implements OnInit, OnChanges {
 
   }
   getClientes() {
-    this.clienteService.getClientes().subscribe((resp: any) => {
+    this.clienteService.getConsultorios().subscribe((resp: any) => {
       this.clientes = resp;
     })
   }

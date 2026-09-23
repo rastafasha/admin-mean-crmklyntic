@@ -4,8 +4,8 @@ import { User } from 'src/app/models/user';
 import { BusquedasService } from 'src/app/services/busqueda.service';
 
 import { Location } from '@angular/common';
-import { Cliente } from 'src/app/models/cliente';
 import { Doctor } from 'src/app/models/doctor';
+import { Consultorio } from 'src/app/models/consultorio';
 
 @Component({
     selector: 'app-busqueda',
@@ -20,7 +20,7 @@ export class BusquedaComponent implements OnInit {
   doctors: Doctor;
   // projecttypes: ProjectType;
   usuarios: User;
-  clientes: Cliente;
+  consultorios: Consultorio;
   specialities: any;
 
   query:string ='';
@@ -45,7 +45,7 @@ export class BusquedaComponent implements OnInit {
       (resp:any) => {
         this.usuarios = resp.usuarios;
         this.doctors = resp.doctors;
-        this.clientes = resp.clientes;
+        this.consultorios = resp.consultorios;
         // this.projecttypes = resp.projecttypes;
       }
     )
@@ -60,7 +60,7 @@ export class BusquedaComponent implements OnInit {
         (resp:any) => {
           this.usuarios = resp.usuarios;
           this.doctors = resp.doctors;
-          this.clientes = resp.clientes;
+          this.consultorios = resp.consultorios;
           // this.projecttypes = resp.projecttypes;
       
           console.log(resp);

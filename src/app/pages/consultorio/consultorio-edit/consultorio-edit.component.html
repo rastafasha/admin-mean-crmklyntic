@@ -1,0 +1,428 @@
+<div class="modal fade" id="editConsultorio" tabindex="-1" aria-labelledby="consultorioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultorioModalLabel">{{title}}: {{consultorioSeleccionado?.name}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="onClose()"></button>
+            </div>
+            <div class="modal-body">
+                <app-loading *ngIf="isLoading"></app-loading>
+                <div class="container" *ngIf="!isLoading">
+                    <!-- Step Indicator -->
+                    <div class="step-indicator m-t-20 m-b-20">
+                        <div class="step" [ngClass]="{'active': currentStep >= 1, 'completed': currentStep > 1}">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Datos</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" [ngClass]="{'active': currentStep >= 2}">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Datos Reserva</span>
+                        </div>
+                    </div>
+                    <div *ngIf="currentStep === 1">
+                        <form *ngIf="clienteForm" class="form-horizontal form-material" (ngSubmit)="handleSubmit()"
+                            [formGroup]="clienteForm">
+                            <div class="row">
+                                <!-- 1. Nombre de la Cuenta / Consultorio (Heredado) -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">Nombre del Consultorio / Médico <span
+                                            class="required text-danger">*</span></label>
+                                    <input type="text" formControlName="name" class="form-control" required>
+                                    @if (clienteForm.get('name')?.touched && clienteForm.get('name')?.invalid) {
+                                    <div class="text-danger small mt-1">
+                                        @if (clienteForm.get('name')?.errors?.['required']) { Campo Requerido }
+                                        @if (clienteForm.get('name')?.errors?.['minlength']) { Mínimo 3 Caracteres }
+                                    </div>
+                                    }
+                                </div>
+
+                                <!-- slug -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">Slug</label>
+                                    <input type="text" formControlName="slug" class="form-control">
+                                </div>
+                                <!-- 2. Redes Sociales (Instagram) -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">Instagram / Redes</label>
+                                    <input type="text" formControlName="rrss" class="form-control"
+                                        placeholder="@usuario">
+                                </div>
+
+                                <!-- 3. Ciudad (Heredado) -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">Ciudad <span class="required text-danger">*</span></label>
+                                    <input type="text" formControlName="ciudad" class="form-control">
+                                    @if (clienteForm.get('ciudad')?.touched &&
+                                    clienteForm.get('ciudad')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+                                </div>
+
+                                <!-- 4. Sitio Web -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">¿Tiene sitio Web?</label>
+                                    <input type="text" formControlName="url" class="form-control"
+                                        placeholder="https://...">
+                                </div>
+
+                                <!-- 5. Especialidad / Categoría Médica (Heredado - Corregido a 'category') -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">Especialidad Médica <span
+                                            class="required text-danger">*</span></label>
+                                    <select class="form-control" formControlName="category">
+                                        <option value="">Seleccione Especialidad</option>
+                                        <!-- Sincronizado con tu backend médico -->
+                                        <option *ngFor="let data of categorias" [value]="data._id">
+                                            {{ data.nombre }}
+                                        </option>
+                                    </select>
+                                    @if (clienteForm.get('category')?.touched &&
+                                    clienteForm.get('category')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+                                </div>
+
+                                <!-- 6. País (Heredado) -->
+                                 <div class="col-xs-12 col-md-6 mb-3">
+                                    <label>Pais<span class="required">*</span></label>
+                                    <div class="input-group">
+                                        <select class="form-control" formControlName="pais">
+                                            <option value="">Seleccione</option>
+                                            <option *ngFor="let data of paises" [value]="data._id">
+                                                {{data.pais}}
+                                            </option>
+                                        </select>
+                                            @if (clienteForm.get('pais')?.touched &&
+                                    clienteForm.get('pais')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+                                    </div>
+                                </div>
+
+                                <!-- 7. Dirección Física (Corregido a 'address' para empalmar con tu Mongoose) -->
+                                <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label">Dirección Física del Consultorio <span
+                                            class="required text-danger">*</span></label>
+                                    <textarea formControlName="address" class="form-control" rows="2"></textarea>
+                                    @if (clienteForm.get('address')?.touched &&
+                                    clienteForm.get('address')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+                                </div>
+
+                                <!-- 8. Fecha de Test (Control de Periodo de Prueba Express) -->
+                                <div class="col-xs-12 col-md-4 mb-3">
+                                    <label class="form-label">Fecha de Test <span
+                                            class="required text-danger">*</span></label>
+                                    <input type="date" formControlName="dateTest" class="form-control">
+                                    @if (clienteForm.get('dateTest')?.touched &&
+                                    clienteForm.get('dateTest')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+                                </div>
+
+                                <!-- 9. Fecha Inicio (Arranque formal de Suscripción) -->
+                                <div class="col-xs-12 col-md-4 mb-3">
+                                    <label class="form-label">Fecha Inicio <span
+                                            class="required text-danger">*</span></label>
+                                    <input type="date" formControlName="dateInicio" class="form-control">
+                                    @if (clienteForm.get('dateInicio')?.touched &&
+                                    clienteForm.get('dateInicio')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+                                </div>
+                                <div class="col-xs-12 col-md-4 mb-3">
+                                        <label>Consultorio/Clínica</label>
+                                        <select class="form-control selecttyp" formControlName="tipoClinica">
+                                            <option value="">Seleccione</option>
+                                            <option value="Consultorio">Consultorio</option>
+                                            <option value="Clinica">Clínica</option>
+                                        </select>
+                                        @if (clienteForm.get('tipoClinica')?.touched &&
+                                    clienteForm.get('tipoClinica')?.errors?.['required']) {
+                                    <div class="text-danger small mt-1">Campo Requerido</div>
+                                    }
+
+                                    </div>
+                                <!-- 10. Asociados / Operadores Asignados (Tu FormArray nativo intacto) -->
+                                <!-- <div class="col-xs-12 col-md-6 mb-3">
+                                    <label class="form-label d-block">Asociados / Colaboradores del CRM <span
+                                            class="required text-danger">*</span></label>
+                                    <div class="border rounded p-2 bg-white"
+                                        style="max-height: 110px; overflow-y: auto;">
+                                        <ng-container formArrayName="partners" *ngIf="partners && partners.length > 0">
+                                            <div *ngFor="let partnerCtrl of clienteForm.get('partners').controls; let i = index"
+                                                class="form-check mb-1">
+                                                <input class="form-check-input" type="checkbox" [formControlName]="i"
+                                                    [id]="'partnerCheckbox' + i" [value]="partners[i].username" />
+                                                <label class="form-check-label small text-secondary"
+                                                    [for]="'partnerCheckbox' + i">
+                                                    {{ partners[i].username }}
+                                                </label>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                            <div class="col-4">
+                                <button (click)="handleSubmit()" class="btn btn-outline-success">
+                                    {{ projectSeleccionado ? 'Actualizar y Continuar' : 'Crear y Continuar' }}
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-success waves-effect waves-light m-r-10 btn-block" type="button"
+                                    (click)="nextStep()">Siguiente</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <!-- datos para la reserva -->
+                    <div *ngIf="currentStep === 2">
+                        <form *ngIf="clienteForm" class="form-horizontal form-material" (ngSubmit)="handleSubmit()"
+                            [formGroup]="clienteForm">
+                            <div class="row">
+
+                                <!-- 1. SECCIÓN: CONSULTAS Y TARIFAS -->
+                                <div class="col-12 col-md-6 mb-4">
+                                    <div class="card p-3 shadow-sm border-light">
+                                        <h4 class="h6 font-weight-bold text-dark mb-3">Consultas y Tarifas <span
+                                                class="text-danger">*</span></h4>
+
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-7">
+                                                <label class="form-label small text-muted mb-1">Nombre / Tipo
+                                                    Consulta</label>
+                                                <input type="text" [(ngModel)]="tempTarifaDesc"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Ej: Consulta de Control">
+                                            </div>
+                                            <div class="col-5">
+                                                <label class="form-label small text-muted mb-1">Precio</label>
+                                                <input type="text" [(ngModel)]="tempTarifaPrecio"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    class="form-control form-control-sm" placeholder="Ej: $30">
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <button type="button" (click)='agregarTarifa()'
+                                                    class="btn btn-purple btn-sm w-100"><i class="bi bi-plus-lg"></i>
+                                                    Agregar Tarifa</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive border rounded bg-white"
+                                            style="max-height: 200px; overflow-y: auto;">
+                                            <table class="table table-sm table-hover mb-0 align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="p-2 small">Descripción</th>
+                                                        <th class="p-2 small" style="width: 100px;">Precio</th>
+                                                        <th class="p-2 small text-center" style="width: 50px;">Acción
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (trf of tarifasArray; track trf; let i = $index) {
+                                                    <tr>
+                                                        <td class="p-2 text-secondary small">{{ trf.descripcion }}</td>
+                                                        <td class="p-2 text-dark font-weight-bold small">{{ trf.precio
+                                                            }}</td>
+                                                        <td class="p-2 text-center">
+                                                            <button type="button" (click)="removerTarifa(i)"
+                                                                class="btn btn-danger btn-xs py-0 px-2"><i
+                                                                    class="bi bi-x-lg small"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    } @empty {
+                                                    <tr>
+                                                        <td colspan="3" class="p-3 text-center text-muted small">No hay
+                                                            tarifas agregadas aún.</td>
+                                                    </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 2. SECCIÓN: SERVICIOS Y PROCEDIMIENTOS -->
+                                <div class="col-12 col-md-6 mb-4">
+                                    <div class="card p-3 shadow-sm border-light">
+                                        <h4 class="h6 font-weight-bold text-dark mb-3">Servicios y Procedimientos <span
+                                                class="text-danger">*</span></h4>
+
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-7">
+                                                <label class="form-label small text-muted mb-1">Procedimiento /
+                                                    Estudio</label>
+                                                <input type="text" [(ngModel)]="tempServicioDesc"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Ej: Ecosonograma Doppler">
+                                            </div>
+                                            <div class="col-5">
+                                                <label class="form-label small text-muted mb-1">Costo Estimado</label>
+                                                <input type="text" [(ngModel)]="tempServicioPrecio"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    class="form-control form-control-sm" placeholder="Ej: $50">
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <button type="button" (click)='agregarServicio()'
+                                                    class="btn btn-purple btn-sm w-100"><i class="bi bi-plus-lg"></i>
+                                                    Agregar Servicio</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive border rounded bg-white"
+                                            style="max-height: 200px; overflow-y: auto;">
+                                            <table class="table table-sm table-hover mb-0 align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="p-2 small">Servicio</th>
+                                                        <th class="p-2 small" style="width: 100px;">Precio</th>
+                                                        <th class="p-2 small text-center" style="width: 50px;">Acción
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (srv of serviciosArray; track srv; let i = $index) {
+                                                    <tr>
+                                                        <td class="p-2 text-secondary small">{{ srv.descripcion }}</td>
+                                                        <td class="p-2 text-dark font-weight-bold small">{{ srv.precio
+                                                            }}</td>
+                                                        <td class="p-2 text-center">
+                                                            <button type="button" (click)="removerServicio(i)"
+                                                                class="btn btn-danger btn-xs py-0 px-2"><i
+                                                                    class="bi bi-x-lg small"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    } @empty {
+                                                    <tr>
+                                                        <td colspan="3" class="p-3 text-center text-muted small">No hay
+                                                            servicios agregados aún.</td>
+                                                    </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. SECCIÓN: INMUNIZACIÓN Y VACUNAS -->
+                                <div class="col-12 col-md-6 mb-4">
+                                    <div class="card p-3 shadow-sm border-light H-100">
+                                        <h4 class="h6 font-weight-bold text-dark mb-3">Inmunización y Control de Vacunas
+                                        </h4>
+
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="switchVacunas"
+                                                formControlName="usavacunas">
+                                            <label class="form-check-label text-secondary small" for="switchVacunas">
+                                                {{ clienteForm.get('usavacunas')?.value ? '✅ Centro de Vacunación Activo' : '❌ No ofrece vacunas' }}
+                                            </label>
+                                        </div>
+
+                                        @if (clienteForm.get('usavacunas')?.value) {
+                                        <div
+                                            class="p-3 bg-light rounded border border-warning animate__animated animate__fadeIn">
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-7">
+                                                    <label
+                                                        class="form-label small text-warning font-weight-bold mb-1">Vacuna</label>
+                                                    <input type="text" [(ngModel)]="tempVacunaDesc"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Ej: Influenza">
+                                                </div>
+                                                <div class="col-5">
+                                                    <label
+                                                        class="form-label small text-warning font-weight-bold mb-1">Precio</label>
+                                                    <input type="text" [(ngModel)]="tempVacunaPrecio"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        class="form-control form-control-sm" placeholder="Ej: $15">
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <button type="button" (click)='agregarVacuna()'
+                                                        class="btn btn-warning text-white btn-xs w-100"><i
+                                                            class="bi bi-plus-lg"></i> Agregar Vacuna</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="table-responsive border rounded bg-white"
+                                                style="max-height: 150px; overflow-y: auto;">
+                                                <table class="table table-sm mb-0 align-middle">
+                                                    <thead class="bg-light" style="font-size: 11px;">
+                                                        <tr>
+                                                            <th class="p-1 text-muted">Vacuna</th>
+                                                            <th class="p-1 text-muted" style="width: 70px;">Precio</th>
+                                                            <th class="p-1 text-center" style="width: 40px;"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @for (vac of vacunasArray; track vac; let i = $index) {
+                                                        <tr>
+                                                            <td class="p-1 text-secondary small"
+                                                                style="font-size: 11px;">💉 {{ vac.descripcion }}</td>
+                                                            <td class="p-1 text-dark font-weight-bold small"
+                                                                style="font-size: 11px;">{{ vac.precio }}</td>
+                                                            <td class="p-1 text-center">
+                                                                <button type="button" (click)="removerVacuna(i)"
+                                                                    class="btn btn-danger btn-xs py-0 px-1"
+                                                                    style="font-size: 10px;"><i
+                                                                        class="bi bi-x-lg"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- 4. HORARIO DE ATENCIÓN -->
+                                <div class="col-12 col-md-6 mb-4">
+                                    <div class="card p-3 shadow-sm border-light h-100">
+                                        <h4 class="h6 font-weight-bold text-dark mb-3">Horario General</h4>
+                                        <label class="form-label small text-muted">Días y Horas de Atención</label>
+                                        <input type="text" formControlName="HorariodeAtencion" class="form-control"
+                                            placeholder="Ej: Lunes a Viernes de 8:00 AM a 2:00 PM">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <button (click)="handleSubmit()" class="btn btn-outline-success">
+                                        {{ projectSeleccionado ? 'Actualizar y Continuar' : 'Crear y Continuar' }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <button class="btn btn-success waves-effect waves-light m-r-10 btn-block"
+                                        type="button" (click)="prevStep2()">Anterior</button>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="onClose()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

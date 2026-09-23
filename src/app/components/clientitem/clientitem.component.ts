@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Cliente } from 'src/app/models/cliente';
+import { Consultorio } from 'src/app/models/consultorio';
 
 @Component({
     selector: 'app-clientitem',
@@ -9,13 +9,13 @@ import { Cliente } from 'src/app/models/cliente';
 })
 export class ClientitemComponent implements OnInit {
 
-  @Input() cliente: Cliente;
+  @Input() consultorio: Consultorio;
   @Input() showAdminControls: boolean = false;
 
   @Output() onTogglePresentation = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<string>();
-  @Output() onDelete = new EventEmitter<Cliente>();
-  @Output() onEditCliente = new EventEmitter<Cliente>();
+  @Output() onDelete = new EventEmitter<Consultorio>();
+  @Output() onEditCliente = new EventEmitter<Consultorio>();
 
 
 
@@ -23,20 +23,20 @@ export class ClientitemComponent implements OnInit {
   }
 
   togglePresentation() {
-    this.onTogglePresentation.emit(this.cliente._id);
+    this.onTogglePresentation.emit(this.consultorio._id);
   }
 
   editCliente() {
-    this.onEdit.emit(this.cliente._id);
+    this.onEdit.emit(this.consultorio._id);
   }
 
   deleteCliente() {
-    this.onDelete.emit(this.cliente);
+    this.onDelete.emit(this.consultorio);
 
   }
 
-  openEditModal(cliente: Cliente): void {
-    this.onEditCliente.emit(cliente);
+  openEditModal(consultorio: Consultorio): void {
+    this.onEditCliente.emit(consultorio);
   }
 
   

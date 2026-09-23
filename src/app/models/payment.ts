@@ -1,4 +1,4 @@
-import { Cliente } from './cliente'; // Asegúrate de la ruta
+import { Consultorio } from './consultorio'; // Asegúrate de la ruta
 import { User } from './user'; // Si tienes el modelo de usuario
 
 // Definimos la estructura interna de la repartición
@@ -9,7 +9,7 @@ interface DetalleReparticion {
 
 export class Payment {
     _id?: string;
-    cliente: Cliente;
+    cliente: Consultorio;
     amount: number;
     tipo_pago: 'inscripcion' | 'suscripcion'; // Usamos literal types para mayor seguridad
     status: boolean;
