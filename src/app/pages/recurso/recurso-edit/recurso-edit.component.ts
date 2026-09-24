@@ -11,33 +11,38 @@ declare var bootstrap: any;
 
 @Component({
   selector: 'app-recurso-edit',
-  standalone:false,
+  standalone: false,
   templateUrl: './recurso-edit.component.html',
   styleUrl: './recurso-edit.component.css'
 })
-export class RecursoEditComponent implements OnInit, OnChanges{
+export class RecursoEditComponent implements OnInit, OnChanges {
 
-   @Input() recursoSeleccionado;
+  @Input() recursoSeleccionado;
   @Output() refreshRecursoList: EventEmitter<void> = new EventEmitter<void>();
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 
-  projectForm: FormGroup;
+  recursoForm: FormGroup;
   title: string;
   usuario: any;
   partners: User[];
   project: Recurso;
   id: string;
 
+  // Variables para el flujo de videos locales a Cloudinary [7]
+  public videoSubir!: File;
+  public videoTemp: any = null;
+  public cargandoVideo: boolean = false;
+
   isLoading: boolean = false;
-  currentStep = 1;
+  currentStep = 1; // 🚀 Control del paso activo en el asistente express
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private recursoService: RecursoService,
-  ) {
-
-  }
+    private fileUploadService: FileUploadService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.usuario = this.authService.getLocalStorage();
@@ -52,7 +57,7 @@ export class RecursoEditComponent implements OnInit, OnChanges{
       this.title = 'Editando Recurso';
       const project = changes['recursoSeleccionado'].currentValue;
       
-      this.projectForm.patchValue({
+      this.recursoForm.patchValue({
         id: project._id,
         titulo: project.titulo,
         descripcion: project.descripcion,
@@ -61,41 +66,39 @@ export class RecursoEditComponent implements OnInit, OnChanges{
         fechaCreacion: project.fechaCreacion,
         tipo: project.tipo,
         categoria: project.categoria,
-        
       });
       this.recursoSeleccionado = project;
-      this.title = 'Editando Recurso';
+      
+      // 🚀 Si ya existe el recurso y es tipo video, podemos permitir que vaya al paso 2 directamente
+      this.currentStep = 1; 
     } else {
-      this.title = 'Editando Recurso';
+      this.title = 'Creando Recurso';
+      this.recursoSeleccionado = null;
+      this.currentStep = 1;
     }
-
   }
 
- 
- 
-
-
   validarFormulario() {
-    this.projectForm = this.fb.group({
+    this.recursoForm = this.fb.group({
       titulo: ['', Validators.required],
       descripcion: [''],
-      urlMedia: [''],
+      urlMedia: [''], // No es requerido al inicio si se va a subir un archivo en el paso 2
       activo: [false],
-      fechaCreacion: ['',],
-      tipo: ['',],
+      fechaCreacion: [new Date()],
+      tipo: ['', Validators.required],
       categoria: ['', Validators.required],
       id: [''],
     });
   }
 
-
   onClose() {
     this.recursoSeleccionado = null;
     this.currentStep = 1;
-    this.projectForm.reset();
+    this.videoTemp = null;
+    this.recursoForm.reset();
     this.title = 'Creando Recurso';
-    // Also reset default values if needed
-    this.projectForm.patchValue({
+    
+    this.recursoForm.patchValue({
       titulo: null,
       descripcion: null,
       urlMedia: null,
@@ -103,86 +106,154 @@ export class RecursoEditComponent implements OnInit, OnChanges{
       fechaCreacion: null,
       tipo: null,
       categoria: null,
-      youtubeurl: null,
     });
-    // Emit event to parent to reset the recursoSeleccionado variable
+
+    const modalElement = document.getElementById('editRecurso');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+      modal.hide();
+    }
+    
+    this.refreshRecursoList.emit();
+    this.closeModal.emit();
+    this.ngOnInit();
+  }
+
+  // NAVEGACIÓN ENTRE PASOS EXPRESOS
+ 
+  nextStep() {
+    const titulo = this.recursoForm.get('titulo');
+    const tipo = this.recursoForm.get('tipo');
+    const categoria = this.recursoForm.get('categoria');
     
 
-     // Close modal programmatically
-        const modalElement = document.getElementById('editRecurso');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-          modal.hide();
+    if (titulo?.invalid || tipo?.invalid ||
+      categoria?.invalid 
 
-        }
-        // Emit event to refresh project list
-        this.refreshRecursoList.emit();
-        this.closeModal.emit();
-        this.ngOnInit()
+    ) {
+      titulo?.markAsTouched();
+      tipo?.markAsTouched();
+      categoria?.markAsTouched();
+      this.recursoForm.markAllAsTouched(); // Esto activa las validaciones visuales
+      return;
+    }
+    this.currentStep = 2;
+
+
   }
 
   
+  prevStep() {
+    this.currentStep = 1;
+  }
+  
+
   handleSubmit() {
-    if (!this.projectForm.valid) {
-      //mostramos las alertas de los campos requeridos
-      this.projectForm.markAllAsTouched(); // Esto activa las validaciones visuales
-      return
+    if (!this.recursoForm.valid) {
+      this.recursoForm.markAllAsTouched();
+      return;
     }
 
     this.isLoading = true;
-    const { titulo } = this.projectForm.value;
+    const { titulo, tipo } = this.recursoForm.value;
 
     const dataToSend = {
-    usuario: this.usuario.uid,
-      ...this.projectForm.value,
+      usuario: this.usuario.uid,
+      ...this.recursoForm.value,
     };
 
     if (this.recursoSeleccionado) {
-      //actualizar
+      // 🔄 MODO ACTUALIZAR TEXTOS
       const data = {
         ...dataToSend,
         _id: this.recursoSeleccionado._id,
       };
-      this.recursoService.updateRecurso(data).subscribe((resp) => {
-        this.isLoading = false;
-        Swal.fire(
-          'Actualizado',
-          `${titulo}  actualizado correctamente`,
-          'success'
-        );
-
-        // Close modal programmatically
-        const modalElement = document.getElementById('editRecurso');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-          modal.hide();
-
-        }
-        // Emit event to refresh project list
-        this.refreshRecursoList.emit();
-        this.ngOnInit()
+      this.recursoService.updateRecurso(data).subscribe({
+        next: (resp: any) => {
+          this.isLoading = false;
+          Swal.fire('Actualizado', `${titulo} actualizado correctamente`, 'success');
+          
+          // Si es tipo video, le permitimos saltar al paso 2 para actualizar el archivo si quiere
+          if (tipo === 'video') {
+            this.currentStep = 2;
+          } else {
+            this.onClose(); // Si es un banner, cerramos el asistente directo
+          }
+        },
+        error: () => this.isLoading = false
       });
     } else {
-      //crear
-      this.recursoService.createRecurso(dataToSend).subscribe((resp: any) => {
-        this.isLoading = false;
-        this.recursoSeleccionado = resp;
-        Swal.fire('¡Creado!', 'Recurso creada.', 'success');
-         // Close modal programmatically
-        const modalElement = document.getElementById('editRecurso');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-          modal.hide();
-
-        }
-        // Emit event to refresh project list
-        this.refreshRecursoList.emit();
-        this.ngOnInit()
+      // 🚀 MODO CREAR REGISTRO (Paso 1)
+      this.recursoService.createRecurso(dataToSend).subscribe({
+        next: (resp: any) => {
+          this.isLoading = false;
+          this.recursoSeleccionado = resp.recurso; // Guardamos el recurso con su ID generado por Mongo
+          
+          if (tipo === 'video') {
+            Swal.fire('¡Paso 1 completado!', 'Registro base creado con éxito. Ahora proceda a cargar su video nativo.', 'success');
+            this.currentStep = 2; // Brincamos automáticamente al paso de carga de video
+          } else {
+            Swal.fire('¡Creado!', 'Banner guardado con éxito.', 'success');
+            this.onClose();
+          }
+          this.cd.detectChanges();
+        },
+        error: () => this.isLoading = false
       });
     }
   }
 
- 
+  // 🎥 CAPTURA EL VIDEO Y GENERA UNA VISTA PREVIA INSTANTÁNEA [7]
+  cambiarVideo(files: FileList) {
+    const file = files[0];
+    if (!file) {
+      this.videoTemp = null;
+      return;
+    }
 
+    const maxPesoBytes = 20 * 1024 * 1024;
+    if (file.size > maxPesoBytes) {
+      Swal.fire('Archivo muy pesado', 'El video supera el límite de 20MB. Optimízalo primero con HandBrake.', 'warning');
+      this.videoTemp = null;
+      return;
+    }
 
+    this.videoSubir = file;
+    this.videoTemp = URL.createObjectURL(file);
+  }
+
+  // 🚀 TRANSMISIÓN HACIA NODE.JS / CLOUDINARY PARA EL REGISTRO YA EXISTENTE [7]
+  subirVideo() {
+    if (!this.videoSubir) {
+      Swal.fire('Atención', 'Debe seleccionar un archivo de video primero', 'info');
+      return;
+    }
+
+    this.cargandoVideo = true;
+
+    this.fileUploadService
+      .actualizarVideo(this.videoSubir, 'recursos', this.recursoSeleccionado._id)
+      .then(resp => {
+        if (resp && resp.ok) {
+          // Sincronizamos la respuesta
+          this.recursoSeleccionado.urlMedia = resp.url;
+          this.recursoSeleccionado.cloudinary_id = resp.cloudinary_id;
+          this.recursoSeleccionado.bytes = resp.bytes;
+
+          this.cargandoVideo = false;
+          this.videoTemp = null;
+          
+          Swal.fire('Guardado', 'El video demostrativo fue subido y enlazado con éxito', 'success');
+          this.onClose(); // Finaliza el flujo completo y refresca
+        } else {
+          this.cargandoVideo = false;
+          Swal.fire('Error', 'El servidor no pudo procesar el formato del video', 'error');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        this.cargandoVideo = false;
+        Swal.fire('Error', 'No se pudo establecer conexión para subir el video', 'error');
+      });
+  }
 }

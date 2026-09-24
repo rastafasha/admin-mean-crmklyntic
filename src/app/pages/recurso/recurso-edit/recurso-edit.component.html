@@ -9,99 +9,210 @@
             <div class="modal-body">
                 <app-loading *ngIf="isLoading"></app-loading>
                 <div class="container" *ngIf="!isLoading">
-                    <form *ngIf="projectForm" class="form-horizontal form-material" [formGroup]="projectForm">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-4">
-                                <label>Nombre del Proyecto <span class="required">*</span></label>
-                                <input type="text" formControlName="titulo" class="form-control"
-                                    (blur)="verificarProject($event)" required>
-                                <div *ngIf="projectForm.get('titulo')?.touched" class="text-danger">
-                                    <div *ngIf="projectForm.get('titulo')?.errors?.['required']">
-                                        Campo Requerido
+                    <!-- Step Indicator -->
+                    <div class="step-indicator m-t-20 m-b-20">
+                        <div class="step" [ngClass]="{'active': currentStep >= 1, 'completed': currentStep > 1}">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Datos</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" [ngClass]="{'active': currentStep >= 2}">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Video</span>
+                        </div>
+                    </div>
+                    <div *ngIf="currentStep === 1" class="fade-in-animation">
+                        <form *ngIf="recursoForm" class="form-material" [formGroup]="recursoForm">
+
+                            <!-- 📦 SECCIÓN 1: DATOS PRINCIPALES DE IDENTIFICACIÓN -->
+                            <div class="row g-3">
+
+                                <!-- Nombre del Proyecto -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-medium">Nombre del Proyecto <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" formControlName="titulo" class="form-control py-2"
+                                        placeholder="Ej: Demo Klyntic Express">
+
+                                    <!-- Validaciones visuales -->
+                                    <div *ngIf="recursoForm.get('titulo')?.touched && recursoForm.get('titulo')?.invalid"
+                                        class="text-danger small mt-1">
+                                        <span *ngIf="recursoForm.get('titulo')?.errors?.['required']"><i
+                                                class="fa-solid fa-circle-exclamation me-1"></i> Campo Requerido</span>
+                                        <span *ngIf="recursoForm.get('titulo')?.errors?.['minlength']"><i
+                                                class="fa-solid fa-circle-exclamation me-1"></i> Mínimo 3
+                                            Caracteres</span>
                                     </div>
-                                    <div *ngIf="projectForm.get('titulo')?.errors?.['minlength']">
-                                        Mínimo 3 Caracteres
+                                </div>
+
+                                <!-- urlMedia -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-medium">urlMedia <span
+                                            class="text-danger">*</span></label>
+                                    <!-- Dejamos el input deshabilitado o editable si el usuario decide pegar un link de ScreenPal manual -->
+                                    <input type="text" formControlName="urlMedia" class="form-control py-2"
+                                        placeholder="Se rellenará solo al subir el video">
+
+                                    <!-- Validaciones visuales -->
+                                    <div *ngIf="recursoForm.get('urlMedia')?.touched && recursoForm.get('urlMedia')?.invalid"
+                                        class="text-danger small mt-1">
+                                        
                                     </div>
                                 </div>
 
                             </div>
-                            <div class="col-xs-12 col-md-4">
-                                <label>urlMedia<span class="required">*</span></label>
-                                <input type="text" formControlName="urlMedia" class="form-control"
-                                    (blur)="verificarProject($event)" required>
-                                <div *ngIf="projectForm.get('urlMedia')?.touched" class="text-danger">
-                                    <div *ngIf="projectForm.get('urlMedia')?.errors?.['required']">
-                                        Campo Requerido
-                                    </div>
-                                    <div *ngIf="projectForm.get('urlMedia')?.errors?.['minlength']">
-                                        Mínimo 3 Caracteres
-                                    </div>
+
+                            <!-- 📦 SECCIÓN 2: DESCRIPCIÓN Y ESTADO -->
+                            <div class="row g-3 mt-2">
+
+                                <!-- Descripción -->
+                                <div class="col-12 col-md-8">
+                                    <label class="form-label fw-medium">Descripción del Recurso</label>
+                                    <textarea formControlName="descripcion" id="descripcion" rows="3"
+                                        class="form-control"
+                                        placeholder="Escriba detalles breves del contenido..."></textarea>
                                 </div>
 
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <label>descripcion </label>
-                                <textarea formControlName="descripcion" id="descripcion"
-                                    class="form-control"></textarea>
-                            </div>
-
-
-                            <div class="row mb-3">
-
-                                <div class="col-xs-12 col-md-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" formControlName="activo" type="checkbox"
-                                            id="flexCheckstatus">
-                                        <label class="form-check-label" for="flexCheckstatus">
-                                            ¿activo?
+                                <!-- Estado Activo (Checkbox alineado verticalmente) -->
+                                <div class="col-12 col-md-4 d-flex align-items-center pt-md-4">
+                                    <div class="form-check form-switch p-3 border rounded-3 bg-light w-100">
+                                        <input class="form-check-input ms-0 me-2" formControlName="activo"
+                                            type="checkbox" id="flexCheckstatus">
+                                        <label class="form-check-label fw-semibold text-dark" for="flexCheckstatus">
+                                            ¿Publicar recurso?
                                         </label>
+                                        <div class="text-muted small">Visible en la Landing Page si está activo</div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div class="clear"></div>
-                            <br>
-                            <div class="row">
-
-                                <div class="col-xs-12 col-md-4">
-                                    <label>Tipo</label>
-                                    <select class="form-control selecttyp" formControlName="tipo">
-                                        <option value="">Seleccione</option>
-                                        <option value="video">Video</option>
-                                        <option value="banner">Banner</option>
-                                    </select>
-                                    <div *ngIf="projectForm.get('tipo')?.touched && projectForm.get('tipo')?.errors?.['required']"
-                                        class="text-danger">Campo Requerido</div>
-
-                                </div>
-                                <div class="col-xs-12 col-md-4">
-                                    <label>categoria</label>
-                                    <select class="form-control selecttyp" formControlName="categoria">
-                                        <option value="">Seleccione</option>
-                                        <option value="general">general</option>
-                                        <option value="odontologia">odontologia</option>
-                                        <option value="asistentes">asistentes</option>
-                                        <option value="whatsapp">whatsapp</option>
-                                    </select>
-                                    <div *ngIf="projectForm.get('categoria')?.touched && projectForm.get('categoria')?.errors?.['required']"
-                                        class="text-danger">Campo Requerido</div>
-
-                                </div>
 
                             </div>
-                        </div>
 
-                        <div class="row">
+                            <!-- 📦 SECCIÓN 3: CLASIFICACIÓN (TIPO Y CATEGORÍA) -->
+                            <div class="row g-3 mt-2">
 
-                            <div class="col-4">
-                                <button (click)="handleSubmit()" class="btn btn-outline-success">
-                                    {{ recursoSeleccionado ? 'Actualizar y Continuar' : 'Crear y Continuar' }}
+                                <!-- Selector de Tipo -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-medium">Tipo de Recurso <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select py-2" formControlName="tipo">
+                                        <option value="">Seleccione tipo...</option>
+                                        <option value="video">🎥 Video Demostrativo</option>
+                                        <option value="banner">🖼️ Banner Publicitario</option>
+                                    </select>
+                                    <div *ngIf="recursoForm.get('tipo')?.touched && recursoForm.get('tipo')?.errors?.['required']"
+                                        class="text-danger small mt-1">
+                                        <i class="fa-solid fa-circle-exclamation me-1"></i> Campo Requerido
+                                    </div>
+                                </div>
+
+                                <!-- Selector de Categoría -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-medium">Categoría del Ecosistema <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select py-2" formControlName="categoria">
+                                        <option value="">Seleccione categoría...</option>
+                                        <option value="general">General</option>
+                                        <option value="odontologia">Odontología</option>
+                                        <option value="asistentes">Asistentes</option>
+                                        <option value="whatsapp">WhatsApp Directo</option>
+                                    </select>
+                                    <div *ngIf="recursoForm.get('categoria')?.touched && recursoForm.get('categoria')?.errors?.['required']"
+                                        class="text-danger small mt-1">
+                                        <i class="fa-solid fa-circle-exclamation me-1"></i> Campo Requerido
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- 🛠️ BOTONES DE CONTROL DE NAVEGACIÓN -->
+                            <div class="d-flex justify-content-end align-items-center gap-2 mt-5 pt-3 border-top">
+
+                                <!-- Botón de guardado asíncrono primario -->
+                                <button (click)="handleSubmit()" type="button" [disabled]="isLoading"
+                                    class="btn btn-primary px-4 py-2 fw-semibold">
+                                    <span *ngIf="!isLoading">
+                                        <i class="fa-solid fa-floppy-disk me-2"></i>{{ recursoSeleccionado ? 'Actualizar
+                                        y Continuar' : 'Crear y Continuar' }}
+                                    </span>
+                                    <span *ngIf="isLoading"><i class="fa-solid fa-spinner fa-spin me-2"></i>
+                                        Procesando...</span>
                                 </button>
+
+                                <!-- Botón Siguiente: Solo se desbloquea si ya existe un ID creado para avanzar al video -->
+                                <button class="btn btn-outline-secondary px-4 py-2 fw-semibold" type="button"
+                                    [disabled]="!recursoSeleccionado" (click)="nextStep()">
+                                    Siguiente <i class="fa-solid fa-chevron-right ms-1 small"></i>
+                                </button>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- PASO 2: OPTIMIZACIÓN Y CARGA DE VIDEO NATIVO -->
+                    <!-- ========================================== -->
+                    <div *ngIf="currentStep === 2" class="fade-in-animation">
+
+                        <div class="text-center p-3 mb-4 rounded-3 bg-dark border border-secondary border-opacity-25"
+                            style="background-color: #121214 !important;">
+                            <h6 class="text-info fw-bold mb-1">
+                                <i class="fa-solid fa-circle-info me-1"></i> Registro Enlazado: {{
+                                recursoSeleccionado?.titulo }}
+                            </h6>
+                            <p class="text-muted small mb-0">Proceda a subir el archivo de video para optimizarlo e
+                                indexarlo en el ecosistema.</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="fw-bold text-dark fs-5 mb-2">Anexe su video demostrativo</h5>
+                            <p class="text-muted small mb-3">Especificaciones requeridas:</p>
+                            <ul class="text-muted small ps-3 mb-4">
+                                <li class="mb-1">Formatos permitidos: <span class="fw-bold text-dark">.mp4, .mov,
+                                        .webm</span></li>
+                                <li class="mb-1">Peso máximo: <span class="fw-bold text-dark">20 MB</span></li>
+                                <li class="mb-1">Recomendación: Optimizar previamente con <span
+                                        class="text-primary fw-medium">HandBrake</span> para acelerar la carga en la
+                                    web.</li>
+                            </ul>
+
+                            <!-- Input de archivos nativo mapeado al controlador -->
+                            <input class="form-control bg-light border py-2" type="file"
+                                accept="video/mp4, video/mov, video/webm"
+                                (change)="cambiarVideo($any($event.target).files)" [disabled]="cargandoVideo">
+                        </div>
+
+                        <!-- 📺 PREVISUALIZACIÓN EN VIVO (Aparece al instante tras seleccionar el archivo local) -->
+                        <div *ngIf="videoTemp" class="mb-4 text-center border-top border-light pt-3">
+                            <p class="text-warning small fw-medium mb-2">
+                                <i class="fa-solid fa-eye me-1"></i> Previsualización de la carga:
+                            </p>
+                            <div class="mx-auto border border-secondary rounded-3 overflow-hidden shadow-sm"
+                                style="max-width: 160px; aspect-ratio: 9/16; background-color: #000;">
+                                <video [src]="videoTemp" autoplay muted loop playsinline class="w-100 h-100"
+                                    style="object-fit: cover;"></video>
                             </div>
                         </div>
 
-                    </form>
+                        <!-- ACCIONES DE NAVEGACIÓN PASO 2 -->
+                        <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-4">
+                            <button type="button" (click)="prevStep()" [disabled]="cargandoVideo"
+                                class="btn btn-outline-secondary px-4">
+                                <i class="fa-solid fa-chevron-left me-2 small"></i> Anterior
+                            </button>
+
+                            <button type="button" (click)="subirVideo()" [disabled]="cargandoVideo || !videoTemp"
+                                class="btn btn-success px-4 fw-bold">
+                                <span *ngIf="!cargandoVideo"><i class="fa-solid fa-cloud-arrow-up me-2"></i> Subir
+                                    video</span>
+                                <span *ngIf="cargandoVideo"><i class="fa-solid fa-spinner fa-spin me-2"></i>
+                                    Transmitiendo a Cloudinary...</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+
 
                 </div>
             </div>
