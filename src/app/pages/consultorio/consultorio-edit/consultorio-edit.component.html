@@ -71,15 +71,15 @@
                                 <div class="col-xs-12 col-md-6 mb-3">
                                     <label class="form-label">Especialidad Médica <span
                                             class="required text-danger">*</span></label>
-                                    <select class="form-control" formControlName="category">
+                                    <select class="form-control" formControlName="speciality">
                                         <option value="">Seleccione Especialidad</option>
                                         <!-- Sincronizado con tu backend médico -->
                                         <option *ngFor="let data of categorias" [value]="data._id">
                                             {{ data.nombre }}
                                         </option>
                                     </select>
-                                    @if (clienteForm.get('category')?.touched &&
-                                    clienteForm.get('category')?.errors?.['required']) {
+                                    @if (clienteForm.get('speciality')?.touched &&
+                                    clienteForm.get('speciality')?.errors?.['required']) {
                                     <div class="text-danger small mt-1">Campo Requerido</div>
                                     }
                                 </div>
@@ -146,6 +146,17 @@
                                     }
 
                                     </div>
+
+                                    <div class="col-xs-12 col-md-4">
+                                    <label>Estado App</label>
+                                    <select class="form-control selecttyp" formControlName="planSuscripcion">
+                                        <option value="">Seleccione</option>
+                                        <option value="GRATIS">Gratis</option>
+                                        <option value="BASICO">Basico</option>
+                                        <option value="PRO">Pro</option>
+                                        <option value="ENTERPRISE">Enterprise</option>
+                                    </select>
+                                </div>
                                 <!-- 10. Asociados / Operadores Asignados (Tu FormArray nativo intacto) -->
                                 <!-- <div class="col-xs-12 col-md-6 mb-3">
                                     <label class="form-label d-block">Asociados / Colaboradores del CRM <span

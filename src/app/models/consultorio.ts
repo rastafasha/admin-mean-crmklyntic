@@ -23,7 +23,6 @@ export class Consultorio {
 
     // Relaciones Estructuradas
     pais?: Pais;
-    speciality?: Speciality;
     partners?: User; // Equivalente a la asignación de usuarios/operadores
 
     // Redes y Fechas
@@ -43,6 +42,7 @@ export class Consultorio {
     Servicios_procedimientosList!: ItemDetalleMedico[];
     ConsultasyTarifasList!: ItemDetalleMedico[];
     HorariodeAtencion?: string;
+    speciality: Speciality; 
 
     // Ubicación y Contacto (Sincronizados con los nombres de tu Mongoose)
     ciudad?: string;
@@ -53,7 +53,7 @@ export class Consultorio {
     // Estados Administrativos del CRM
     status?: 'Activo' | 'Desactivado';
     statusapp?: 'TEST' | 'SUSCRITO' | 'PENDIENTE' | 'COLABORADOR';
-    planSuscripcion!: 'GRATIS' | 'BASICO' | 'PRO';
+    planSuscripcion!: 'GRATIS' | 'BASICO' | 'PRO' |'ENTERPRISE';
     fechaVencimiento?: Date;
     idSuscripcionPago?: string;
 

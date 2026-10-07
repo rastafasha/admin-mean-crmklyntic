@@ -113,7 +113,7 @@ currentStep = 1;
         url: cliente.url,
 
         // 🛡️ NAVEGACIÓN SEGURA PARA RELACIONES: Evita errores de consola si vienen como ID o como Objeto completo
-        category: cliente.category?._id || cliente.category || '',
+        speciality: cliente.speciality?._id || cliente.speciality || '',
         pais: cliente.pais?._id || cliente.pais || '',
 
         // Control Comercial y Estados Administrativos del CRM
@@ -174,7 +174,7 @@ currentStep = 1;
     rrss: [''],
     ciudad: ['', Validators.required],
     url: [''],
-    category: ['', Validators.required],
+    speciality: ['', Validators.required],
     pais: ['', Validators.required],
     
     // 🔥 CORRECCIÓN 1: 'address' debe coincidir milimétricamente con tu HTML
@@ -192,6 +192,7 @@ currentStep = 1;
     // 🏥 CONTROLES DE LA APP DE RESERVAS EXPRESS
     usavacunas: [false, Validators.required],
     HorariodeAtencion: [''],
+    planSuscripcion: [''],
 
     // Inicializados como arreglos vacíos nativos
     Servicios_procedimientosList: [[]],
@@ -291,6 +292,7 @@ currentStep = 1;
             slug: res.slug,
             rrss: res.rrss,
             tipoClinica: res.tipoClinica,
+            speciality: res.speciality?._id || res.speciality || '',
             
             // 🛡️ CONTROL SEGURO DE PAÍS: Evita que la app se cuelgue si res.pais viene vacío
             pais: res.pais?._id || res.pais || '', 
