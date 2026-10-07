@@ -222,6 +222,8 @@ export class RecursoEditComponent implements OnInit, OnChanges {
     this.videoTemp = URL.createObjectURL(file);
   }
 
+  
+
   // 🚀 TRANSMISIÓN HACIA NODE.JS / CLOUDINARY PARA EL REGISTRO YA EXISTENTE [7]
   subirVideo() {
     if (!this.videoSubir) {

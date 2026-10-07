@@ -19,7 +19,7 @@ interface ItemMedico {
 }
 @Component({
   selector: 'app-consultorio-edit',
-  standalone:false,
+  standalone: false,
   templateUrl: './consultorio-edit.component.html',
   styleUrl: './consultorio-edit.component.css'
 })
@@ -59,7 +59,9 @@ export class ConsultorioEditComponent {
   tempVacunaPrecio: string = '';
 
   isLoading: boolean = false;
-currentStep = 1;
+  currentStep = 1;
+  
+
   constructor(
     private fb: FormBuilder,
     private usuarioService: UserService,
@@ -79,13 +81,13 @@ currentStep = 1;
     console.log(this.consultorioSeleccionado)
   }
 
-    ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (
       changes['consultorioSeleccionado'] &&
       changes['consultorioSeleccionado'].currentValue
     ) {
       const cliente = changes['consultorioSeleccionado'].currentValue;
-      
+
       // 1. Cargamos el FormArray de los usuarios asignados/colaboradores (Mantiene tu lógica nativa)
       this.setPartnersFormArray(cliente.partners);
 
@@ -103,7 +105,7 @@ currentStep = 1;
         apellido: cliente.apellido,
         slug: cliente.slug,
         user_id: cliente.user_id,
-        
+
         // Ubicación y Contacto sincronizados con Mongoose
         phone: cliente.phone,
         rrss: cliente.rrss,
@@ -168,42 +170,42 @@ currentStep = 1;
     this.clienteForm.setControl('partners', partnersFormArray);
   }
 
-   validarFormulario() {
-  this.clienteForm = this.fb.group({
-    name: ['', Validators.required],
-    rrss: [''],
-    ciudad: ['', Validators.required],
-    url: [''],
-    speciality: ['', Validators.required],
-    pais: ['', Validators.required],
-    
-    // 🔥 CORRECCIÓN 1: 'address' debe coincidir milimétricamente con tu HTML
-    address: ['', Validators.required], 
-    
-    dateTest: ['', Validators.required],
-    dateInicio: ['', Validators.required],
-    tipoClinica: ['', Validators.required], // Captura el select de Consultorio/Clínica
+  validarFormulario() {
+    this.clienteForm = this.fb.group({
+      name: ['', Validators.required],
+      rrss: [''],
+      ciudad: ['', Validators.required],
+      url: [''],
+      speciality: ['', Validators.required],
+      pais: ['', Validators.required],
 
-    // 🔒 CAMPOS OCULTOS (Vienen heredados del Doctor seleccionado del CRM)
-    slug: [''],    // Quitamos 'Validators.required' aquí para que no tranque si se genera en el backend
-    user_id: [''], // Se llena automáticamente al cargar el prospecto
-    id: [''],
+      // 🔥 CORRECCIÓN 1: 'address' debe coincidir milimétricamente con tu HTML
+      address: ['', Validators.required],
 
-    // 🏥 CONTROLES DE LA APP DE RESERVAS EXPRESS
-    usavacunas: [false, Validators.required],
-    HorariodeAtencion: [''],
-    planSuscripcion: [''],
+      dateTest: ['', Validators.required],
+      dateInicio: ['', Validators.required],
+      tipoClinica: ['', Validators.required], // Captura el select de Consultorio/Clínica
 
-    // Inicializados como arreglos vacíos nativos
-    Servicios_procedimientosList: [[]],
-    ConsultasyTarifasList: [[]],
-    vacunasList: [[]]
-  });
-}
+      // 🔒 CAMPOS OCULTOS (Vienen heredados del Doctor seleccionado del CRM)
+      slug: [''],    // Quitamos 'Validators.required' aquí para que no tranque si se genera en el backend
+      user_id: [''], // Se llena automáticamente al cargar el prospecto
+      id: [''],
+
+      // 🏥 CONTROLES DE LA APP DE RESERVAS EXPRESS
+      usavacunas: [false, Validators.required],
+      HorariodeAtencion: [''],
+      planSuscripcion: [''],
+
+      // Inicializados como arreglos vacíos nativos
+      Servicios_procedimientosList: [[]],
+      ConsultasyTarifasList: [[]],
+      vacunasList: [[]]
+    });
+  }
 
 
 
-// =========================================================================
+  // =========================================================================
   // ➕ FUNCIONES PARA AGREGAR CON DESCRIPCIÓN Y PRECIO SEPARADOS
   // =========================================================================
   agregarServicio() {
@@ -262,13 +264,13 @@ currentStep = 1;
 
   // Formatea el objeto para guardarlo ordenadamente como texto en MongoDB
   private actualizarValorFormulario(controlName: string, arrayData: ItemMedico[]) {
-  // Pasamos el array de objetos directamente, sin transformarlo a texto plano
-  this.clienteForm.get(controlName)?.setValue(arrayData); 
-  this.clienteForm.get(controlName)?.updateValueAndValidity();
-}
+    // Pasamos el array de objetos directamente, sin transformarlo a texto plano
+    this.clienteForm.get(controlName)?.setValue(arrayData);
+    this.clienteForm.get(controlName)?.updateValueAndValidity();
+  }
 
 
-   cargarProject(_id: string) {
+  cargarProject(_id: string) {
     if (_id !== null && _id !== undefined) {
       this.title = 'Editando Consultorio';
       this.isLoading = true;
@@ -293,17 +295,17 @@ currentStep = 1;
             rrss: res.rrss,
             tipoClinica: res.tipoClinica,
             speciality: res.speciality?._id || res.speciality || '',
-            
+
             // 🛡️ CONTROL SEGURO DE PAÍS: Evita que la app se cuelgue si res.pais viene vacío
-            pais: res.pais?._id || res.pais || '', 
-            
+            pais: res.pais?._id || res.pais || '',
+
             dateTest: res.dateTest,
             dateInicio: res.dateInicio,
             status: res.status,
             statusapp: res.statusapp,
             planSuscripcion: res.planSuscripcion,
             moneda: res.moneda || 'USD',
-            
+
             // Contacto y Ubicación acoplados a tu Mongoose
             address: res.address,
             ciudad: res.ciudad,
@@ -315,7 +317,7 @@ currentStep = 1;
             Servicios_procedimientosList: this.serviciosArray,
             vacunasList: this.vacunasArray,
             HorariodeAtencion: res.HorariodeAtencion || '',
-            
+
             partners: res.partners?._id || res.partners,
           });
 
@@ -329,7 +331,7 @@ currentStep = 1;
     } else {
       this.title = 'Creando Consultorio';
       this.consultorioSeleccionado = null;
-      
+
       // Limpieza absoluta de la memoria al cambiar a modo "Crear" para evitar residuos visuales
       this.tarifasArray = [];
       this.serviciosArray = [];
@@ -347,19 +349,18 @@ currentStep = 1;
 
   onClose() {
     this.consultorioSeleccionado = null;
+   
     this.clienteForm.reset();
     this.title = 'Creando Consultorio';
-    // Also reset default values if needed
     this.clienteForm.patchValue({
       status: false,
     });
-    // Emit event to parent to reset the consultorioSeleccionado variable
     this.closeModal.emit();
   }
 
 
   nextStep() {
-    
+
     this.currentStep = 2;
   }
 
@@ -367,106 +368,107 @@ currentStep = 1;
     this.currentStep = 1;
   }
 
- handleSubmit() {
-  // 1. Sincronizamos los arrays de objetos nativos acumulados en las tablas con el formulario de Angular
-  this.clienteForm.get('ConsultasyTarifasList')?.setValue(this.tarifasArray);
-  this.clienteForm.get('Servicios_procedimientosList')?.setValue(this.serviciosArray);
-  this.clienteForm.get('vacunasList')?.setValue(this.vacunasArray);
+  handleSubmit() {
+    // 1. Sincronizamos los arrays de objetos nativos acumulados en las tablas con el formulario de Angular
+    this.clienteForm.get('ConsultasyTarifasList')?.setValue(this.tarifasArray);
+    this.clienteForm.get('Servicios_procedimientosList')?.setValue(this.serviciosArray);
+    this.clienteForm.get('vacunasList')?.setValue(this.vacunasArray);
 
-  // 2. VALIDACIÓN MANUAL DE SEGURIDAD EXCLUSIVA PARA EL SAAS EXPRESS
-  if (this.tarifasArray.length === 0) {
-    Swal.fire('Faltan Datos', 'Por favor, agregue al menos una Consulta y Tarifa en la pestaña 2.', 'warning');
-    return;
-  }
+    // 2. VALIDACIÓN MANUAL DE SEGURIDAD EXCLUSIVA PARA EL SAAS EXPRESS
+    if (this.tarifasArray.length === 0) {
+      Swal.fire('Faltan Datos', 'Por favor, agregue al menos una Consulta y Tarifa en la pestaña 2.', 'warning');
+      return;
+    }
 
-  if (this.serviciosArray.length === 0) {
-    Swal.fire('Faltan Datos', 'Por favor, agregue al menos un Servicio y Procedimiento en la pestaña 2.', 'warning');
-    return;
-  }
+    if (this.serviciosArray.length === 0) {
+      Swal.fire('Faltan Datos', 'Por favor, agregue al menos un Servicio y Procedimiento en la pestaña 2.', 'warning');
+      return;
+    }
 
-  // 3. Verificamos la validez de todos los inputs del formulario reactivo
-  if (!this.clienteForm.valid) {
-    // Marcamos todo como tocado para que los mensajes rojos de "Campo Requerido" aparezcan en pantalla
-    this.clienteForm.markAllAsTouched();
-    
-    // Imprimimos en consola qué campo exacto está fallando para que puedas auditarlo rápido
-    console.log('❌ Campos inválidos detectados:', this.findInvalidControls());
-    
-    Swal.fire('Formulario Incompleto', 'Por favor, revise los campos obligatorios marcados en rojo en la pestaña 1 o 2.', 'error');
-    return;
-  }
+    // 3. Verificamos la validez de todos los inputs del formulario reactivo
+    if (!this.clienteForm.valid) {
+      // Marcamos todo como tocado para que los mensajes rojos de "Campo Requerido" aparezcan en pantalla
+      this.clienteForm.markAllAsTouched();
 
-  this.isLoading = true;
-  const dataToSend = {
-    ...this.clienteForm.value,
-  };
+      // Imprimimos en consola qué campo exacto está fallando para que puedas auditarlo rápido
+      console.log('❌ Campos inválidos detectados:', this.findInvalidControls());
 
-  const nombreConsultorio = this.clienteForm.get('name')?.value || 'Consultorio';
+      Swal.fire('Formulario Incompleto', 'Por favor, revise los campos obligatorios marcados en rojo en la pestaña 1 o 2.', 'error');
+      return;
+    }
 
-  if (this.consultorioSeleccionado) {
-    // =======================================================================
-    // ACCIÓN: ACTUALIZAR EN MONGODB
-    // =======================================================================
-    const data = {
-      ...dataToSend,
-      _id: this.consultorioSeleccionado._id,
+    this.isLoading = true;
+    const dataToSend = {
+      ...this.clienteForm.value,
     };
 
-    this.consultorioService.updateConsultorio(data).subscribe({
-      next: (resp) => {
-        this.isLoading = false;
-        Swal.fire('Actualizado', `"${nombreConsultorio}" actualizado correctamente`, 'success');
-        this.cerrarModalProgramatico();
-        this.refreshClientList.emit();
-        this.ngOnInit();
-      },
-      error: (err) => {
-        this.isLoading = false;
-        Swal.fire('Error', 'No se pudieron actualizar los datos en Render.', 'error');
-      }
-    });
+    const nombreConsultorio = this.clienteForm.get('name')?.value || 'Consultorio';
 
-  } else {
-    // =======================================================================
-    // ACCIÓN: CREAR EN MONGODB
-    // =======================================================================
-    this.consultorioService.createConsultorio(dataToSend).subscribe({
-      next: (resp: any) => {
-        this.isLoading = false;
-        Swal.fire('Creado', `"${nombreConsultorio}" creado correctamente`, 'success');
-        this.cerrarModalProgramatico();
-        this.refreshClientList.emit();
-        this.ngOnInit();
-      },
-      error: (err) => {
-        this.isLoading = false;
-        Swal.fire('Error', 'Fallo al guardar el consultorio Express.', 'error');
-      }
-    });
-  }
-}
+    if (this.consultorioSeleccionado) {
+      // =======================================================================
+      // ACCIÓN: ACTUALIZAR EN MONGODB
+      // =======================================================================
+      const data = {
+        ...dataToSend,
+        _id: this.consultorioSeleccionado._id,
+      };
 
-/**
- * Función de auditoría: Te dice exactamente qué inputs están fallando en tu consola (F12)
- */
-private findInvalidControls() {
-  const invalid = [];
-  const controls = this.clienteForm.controls;
-  for (const name in controls) {
-    if (controls[name].invalid) {
-      invalid.push(name);
+      this.consultorioService.updateConsultorio(data).subscribe({
+        next: (resp) => {
+          this.isLoading = false;
+
+          Swal.fire('Actualizado', `"${nombreConsultorio}" actualizado correctamente`, 'success');
+          this.cerrarModalProgramatico();
+          this.refreshClientList.emit();
+          this.ngOnInit();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          Swal.fire('Error', 'No se pudieron actualizar los datos en Render.', 'error');
+        }
+      });
+
+    } else {
+      // =======================================================================
+      // ACCIÓN: CREAR EN MONGODB
+      // =======================================================================
+      this.consultorioService.createConsultorio(dataToSend).subscribe({
+        next: (resp: any) => {
+          this.isLoading = false;
+          Swal.fire('Creado', `"${nombreConsultorio}" creado correctamente`, 'success');
+          this.cerrarModalProgramatico();
+          this.refreshClientList.emit();
+          this.ngOnInit();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          Swal.fire('Error', 'Fallo al guardar el consultorio Express.', 'error');
+        }
+      });
     }
   }
-  return invalid;
-}
 
-private cerrarModalProgramatico() {
-  const modalElement = document.getElementById('editConsultorio');
-  if (modalElement) {
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    if (modal) modal.hide();
+  /**
+   * Función de auditoría: Te dice exactamente qué inputs están fallando en tu consola (F12)
+   */
+  private findInvalidControls() {
+    const invalid = [];
+    const controls = this.clienteForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
   }
-}
+
+  private cerrarModalProgramatico() {
+    const modalElement = document.getElementById('editConsultorio');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) modal.hide();
+    }
+  }
 
 
 

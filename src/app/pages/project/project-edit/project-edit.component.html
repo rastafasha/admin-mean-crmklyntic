@@ -51,7 +51,7 @@
                                 <div class="col-xs-12 col-md-4 mb-2">
                                     <label>Instagram</label>
                                     <input type="text" formControlName="rrss" class="form-control">
-                                    
+
 
                                 </div>
                                 <div class="col-xs-12 col-md-4 mb-2">
@@ -71,10 +71,10 @@
                                 </div>
                                 <div class="col-xs-12 col-md-4 mb-2">
                                     <label>Email Contacto </label>
-                                    <input type="text" formControlName="email_contacto" class="form-control">
+                                    <input type="text" formControlName="email" class="form-control">
 
                                 </div>
-                                
+
 
                                 <div class="col-xs-12 col-md-4 mb-2">
                                     <label>Especialidad<span class="required">*</span></label>
@@ -112,10 +112,10 @@
 
                                     </div>
                                     <div class="col-xs-12 col-md-4 mb-2">
-                                    <label>¿Tiene sitio Web?</label>
-                                    <input type="text" formControlName="url" class="form-control">
+                                        <label>¿Tiene sitio Web?</label>
+                                        <input type="text" formControlName="url" class="form-control">
 
-                                </div>
+                                    </div>
                                     <div class="col-xs-12 col-md-4">
                                         <div class="form-check">
                                             <input class="form-check-input" formControlName="hasLaboratory"
@@ -184,6 +184,7 @@
                                         {{ projectSeleccionado ? 'Actualizar y Continuar' : 'Crear y Continuar' }}
                                     </button>
                                 </div>
+                                
                                 <div class="col-4">
                                     <button class="btn btn-success waves-effect waves-light m-r-10 btn-block"
                                         type="button" (click)="nextStep()">Siguiente</button>
@@ -272,8 +273,8 @@
                                 <div class="col-xs-12 col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input" formControlName="correo_sendit" type="checkbox"
-                                            id="flexCheckstatus">
-                                        <label class="form-check-label" for="flexCheckstatus">
+                                            id="flexcorreo_sendit">
+                                        <label class="form-check-label" for="flexcorreo_sendit">
                                             ¿Correo Enviado por sistema?
                                         </label>
                                     </div>
@@ -290,7 +291,7 @@
                             </div>
                             <div class="clear"></div>
                             <div class="row mb-3">
-                                
+
                                 <div class="col-xs-12 col-md-4">
                                     <label>Canal Origen </label>
                                     <select class="form-control selecttyp" formControlName="canal_origen">
@@ -323,8 +324,8 @@
                                         <option value="SUSCRITO">Suscrito</option>
                                     </select>
                                 </div>
-                                
-                                
+
+
                             </div>
                             <div class="clear"></div>
                             <div class="row mb-3">
@@ -342,6 +343,17 @@
                                     <button (click)="handleSubmit()" class="btn btn-outline-success">
                                         {{ projectSeleccionado ? 'Actualizar y Continuar' : 'Crear y Continuar' }}
                                     </button>
+                                </div>
+                                <div class="col-4">
+                                    <!-- 🔥 BOTÓN DINÁMICO DE WHATSAPP: Solo aparece si el webhook de Render falló o retornó el enlace manual -->
+                                    <div *ngIf="whatsappBackupLink" class="mt-3 text-center animated fadeIn">
+                                        <a [href]="whatsappBackupLink" target="_blank"
+                                            class="btn btn-success d-inline-flex align-items-center justify-content-center px-4 py-2 w-100"
+                                            style="background-color: #25D366; border-color: #25D366; border-radius: 8px; font-weight: 600; gap: 8px; color: #ffffff; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);">
+                                            <i class="bi bi-whatsapp" style="font-size: 1.2rem;"></i>
+                                            <span>Enviar Accesos Manuales por WhatsApp</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mt-3">

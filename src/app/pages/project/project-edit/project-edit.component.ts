@@ -14,6 +14,7 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Doctor } from 'src/app/models/doctor';
 import { Pais } from 'src/app/models/pais.model';
 import { Speciality } from 'src/app/models/speciality';
@@ -55,7 +56,8 @@ export class ProjectEditComponent implements OnInit, OnChanges {
   isLoading: boolean = false;
   currentStep = 1;
   cargandoImagen = false;
-  projectExiste = false
+  projectExiste = false;
+  public whatsappBackupLink: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +67,8 @@ export class ProjectEditComponent implements OnInit, OnChanges {
     private paisService: PaisService,
     private categoryService: SpecialityService,
     private fileUploadService: FileUploadService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
   ) {
 
   }
@@ -91,6 +94,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         name: project.name,
         nombre: project.nombre,
         apellido: project.apellido,
+        email: project.email,
         slug: project.slug,
         phone: project.phone,
         url: project.url,
@@ -109,7 +113,6 @@ export class ProjectEditComponent implements OnInit, OnChanges {
         statusapp: project.statusapp,
         hasLaboratory: project.hasLaboratory,
         estado_seguimiento: project.estado_seguimiento,
-        email_contacto: project.email_contacto,
         canal_origen: project.canal_origen,
         correo_enviado: project.correo_enviado,
         correo_sendit: project.correo_sendit,
@@ -170,7 +173,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       propuesta: [''],
       estado_seguimiento: ['PENDIENTE'],
       statusapp: ['PENDIENTE'],
-      email_contacto: [''],
+      email: [''],
       canal_origen: [''],
       correo_enviado: [''],
       correo_sendit: [false],
@@ -213,25 +216,25 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       notificado: [false],
       partners: null,
       estado_seguimiento: null,
-      email_contacto: null,
+      email: null,
       canal_origen: null,
       correo_enviado: null,
       img: null,
     });
     // Emit event to parent to reset the projectSeleccionado variable
-    
 
-     // Close modal programmatically
-        const modalElement = document.getElementById('editProject');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-          modal.hide();
+    this.whatsappBackupLink = ''; // 👈 Limpieza
+    // Close modal programmatically
+    const modalElement = document.getElementById('editProject');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+      modal.hide();
 
-        }
-        // Emit event to refresh project list
-        this.refreshProjectList.emit();
-        this.closeModal.emit();
-        this.ngOnInit()
+    }
+    // Emit event to refresh project list
+    this.refreshProjectList.emit();
+    this.closeModal.emit();
+    this.ngOnInit()
   }
 
   nextStep() {
@@ -248,11 +251,11 @@ export class ProjectEditComponent implements OnInit, OnChanges {
 
     if (name?.invalid || url?.invalid ||
       phone?.invalid || category?.invalid ||
-       pais?.invalid || ubicacion?.invalid ||
+      pais?.invalid || ubicacion?.invalid ||
       tipoClinica?.invalid ||
       dateVisita?.invalid ||
       dateAprobado?.invalid ||
-      hasVisited?.invalid 
+      hasVisited?.invalid
 
     ) {
       name?.markAsTouched();
@@ -273,7 +276,7 @@ export class ProjectEditComponent implements OnInit, OnChanges {
 
   }
 
-  nextStep3(){
+  nextStep3() {
     this.currentStep = 3;
   }
 
@@ -367,32 +370,116 @@ export class ProjectEditComponent implements OnInit, OnChanges {
       };
       this.projectService.updateDoctor(data).subscribe((resp) => {
         this.isLoading = false;
-        Swal.fire(
-          'Actualizado',
-          `${name}  actualizado correctamente`,
-          'success'
-        );
+        // 🟢 INYECCIÓN DE TU LÓGICA EXPRESS ADAPTADA AL CRM
+        // Si el backend nos avisa que el webhook falló (devolviendo la bandera o el link de escape)
+        if (resp && resp['whatsapp_link']) {
+          
+          // 1. Extraemos los datos reales del médico recién actualizado
+          const doctorData = this.projectSeleccionado;
+          const nombreDoctor = `${doctorData.nombre || ''} ${doctorData.apellido || ''}`.trim() || this.projectSeleccionado.name;
+          const telefonoDoctor = doctorData.phone ? String(doctorData.phone).replace(/[^\d]/g, '') : '';
+          const correoDoctor = doctorData.email || '';
+          
+          // Estructuramos el subdominio de acceso según el tipo de clínica (Enterprise o Express)
+          const esEnterprise = doctorData.tipoClinica === 'Clínica' || doctorData.tipoClinica === 'Clinica';
+          const urlAcceso = `https://${doctorData.slug || 'centro-medico'}.${esEnterprise ? 'admin.' : ''}klyntic.com`;
 
-        // Close modal programmatically
+          // 2. Estructuramos tu plantilla de texto plano comercial
+          const mensajeBot = 
+            `✨ *KLYNTIC CONSULTORIO DIGITAL* ✨\n\n` +
+            `👋 ¡Hola Dr(a). ${nombreDoctor}! Su acceso a la plataforma ya se encuentra activo y configurado.\n\n` +
+            `🔗 *Enlace Privado:* ${urlAcceso}\n` +
+            `📧 *Usuario de Ingreso:* ${correoDoctor}\n` +
+            `📧 *Contraseña:* ${telefonoDoctor}\n\n` +
+            `Cualquier duda o asistencia con la configuración inicial de sus agendas me avisa. 🚀`;
+
+          // 3. Armamos la URL limpia usando tu formato nativo wa.me sin codificaciones dobles
+          if (telefonoDoctor) {
+            this.whatsappBackupLink = `https://wa.me/${telefonoDoctor}?text=${encodeURIComponent(mensajeBot)}`;
+          }
+        }
+        const project_name = this.projectForm.get('name')?.value || 'Médico';
+
+        // 🟢 CASO A: Si el Webhook falló y tenemos el link de escape listo
+        if (this.whatsappBackupLink) {
+          Swal.fire({
+            title: '¡Actualizado con éxito! 🚀',
+            html: `
+              <p>Los datos de <strong>${project_name}</strong> se guardaron correctamente.</p>
+              <p style="font-size: 14px; color: #666;">El envío automático falló o está encolado. Despacha las credenciales manualmente:</p>
+              <!-- Al ser un enlace wa.me limpio, Angular lo renderiza perfecto sin activar alertas de XSS -->
+              <a href="${this.whatsappBackupLink}" 
+                 target="_blank" 
+                 class="swal2-confirm swal2-styled" 
+                 style="background-color: #25D366; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; padding: 10px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.3); margin-top: 10px;">
+                 <i class="bi bi-whatsapp"></i> Enviar Accesos por WhatsApp
+              </a>
+            `,
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Cerrar Ventana',
+            confirmButtonColor: '#6c757d' // Color gris neutral para el botón de cerrar de Swal
+          }).then(() => {
+            // Cuando cierren el Swal, ejecutamos la limpieza y cierre del modal de Bootstrap de forma segura
+            this.ejecutarCierreYRefresco();
+          });
+        }
+        // ⚪ CASO B: Si todo salió perfecto en piloto automático por Render
+        else {
+          Swal.fire(
+            'Actualizado',
+            `"${project_name}" actualizado correctamente por el sistema.`,
+            'success'
+          ).then(() => {
+            this.ejecutarCierreYRefresco();
+          });
+        }
+
+        // 🟢 CLAVE: Si se generó el link de respaldo, NO cerramos el modal de golpe
+        // para permitirte presionar el botón verde en la pantalla.
+        if (this.whatsappBackupLink) {
+          console.log('📲 Link de escape listo. El modal se mantiene abierto para el envío manual.');
+          this.refreshProjectList.emit(); // Refrescamos la lista de fondo de todos modos
+          return; // Cortamos la ejecución aquí
+        }
+
+        // Si NO hay link (todo salió automático), cerramos el modal de forma normal
         const modalElement = document.getElementById('editProject');
         const modal = bootstrap.Modal.getInstance(modalElement);
         if (modal) {
           modal.hide();
-
         }
-        // Emit event to refresh project list
+
         this.refreshProjectList.emit();
-        this.ngOnInit()
+        this.ngOnInit();
       });
     } else {
       //crear
       this.projectService.createDoctor(dataToSend).subscribe((resp: any) => {
         this.isLoading = false;
+        // 🟢 Guardamos lo que viene del backend (whatsapp_link) en tu variable de Angular (whatsappBackupLink)
+        if (resp && resp['whatsapp_link']) {
+          this.whatsappBackupLink = resp['whatsapp_link'];
+        }
         this.projectSeleccionado = resp;
         Swal.fire('¡Paso 1 completado!', 'Tienda creada. Ahora Agrega la info para el menu y sube la imagen.', 'success');
         this.currentStep = 2;
       });
     }
+  }
+
+  private ejecutarCierreYRefresco() {
+    // Ocultamos el modal de Bootstrap programáticamente sin colisiones visuales
+    const modalElement = document.getElementById('editProject');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) modal.hide();
+    }
+
+    // Refrescamos la lista de la tabla de fondo y reiniciamos el formulario
+    this.refreshProjectList.emit();
+    this.ngOnInit();
+    this.whatsappBackupLink = ''; // Limpiamos el link de la memoria
   }
 
   cambiarImagen(file: File) {
